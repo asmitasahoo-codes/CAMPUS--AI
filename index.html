@@ -1,0 +1,2759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Campus AI — Student Information Assistant</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Inter',sans-serif;
+    background:#090914;
+    color:#f5f3ff;
+    min-height:100vh;
+}
+
+button{
+    font-family:inherit;
+    cursor:pointer;
+}
+
+.app{
+    display:flex;
+    min-height:100vh;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+    width:245px;
+    background:#10101d;
+    border-right:1px solid #27243c;
+    padding:25px 15px;
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    z-index:10;
+}
+
+.logo{
+    padding:0 14px 28px;
+}
+
+.logo h1{
+    font-size:20px;
+    font-weight:800;
+    background:linear-gradient(90deg,#a78bfa,#e879f9);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.logo p{
+    color:#85829b;
+    font-size:11px;
+    margin-top:5px;
+}
+
+.nav-title{
+    font-size:10px;
+    color:#66637b;
+    letter-spacing:1.5px;
+    padding:0 14px;
+    margin:15px 0 9px;
+}
+
+.nav-item{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:12px 14px;
+    border-radius:10px;
+    color:#9996ac;
+    font-size:13px;
+    margin-bottom:4px;
+    transition:.2s;
+}
+
+.nav-item:hover{
+    background:#1b192d;
+    color:white;
+}
+
+.nav-item.active{
+    background:linear-gradient(90deg,#241d45,#1c1830);
+    color:#c4b5fd;
+    border:1px solid #30265a;
+}
+
+.nav-icon{
+    width:18px;
+    text-align:center;
+}
+
+/* MAIN */
+
+.main{
+    margin-left:245px;
+    width:calc(100% - 245px);
+    padding:30px 35px;
+}
+
+.page{
+    display:none;
+    animation:fadeIn .25s ease;
+}
+
+.page.active{
+    display:block;
+}
+
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(5px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:28px;
+}
+
+.topbar h2{
+    font-size:25px;
+}
+
+.topbar p{
+    color:#85829b;
+    font-size:13px;
+    margin-top:5px;
+}
+
+.profile{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.avatar{
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#8b5cf6,#ec4899);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-weight:700;
+}
+
+/* HOME */
+
+.hero{
+    min-height:82vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    max-width:900px;
+}
+
+.hero-badge{
+    display:inline-block;
+    width:fit-content;
+    padding:7px 13px;
+    border-radius:30px;
+    background:#17142a;
+    border:1px solid #30265a;
+    color:#b9a7ff;
+    font-size:11px;
+    margin-bottom:22px;
+}
+
+.hero h1{
+    font-size:clamp(42px,6vw,76px);
+    line-height:1.02;
+    letter-spacing:-3px;
+    margin-bottom:20px;
+}
+
+.gradient-text{
+    background:linear-gradient(90deg,#a78bfa,#f0abfc);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.hero p{
+    max-width:650px;
+    color:#9996ac;
+    line-height:1.7;
+    font-size:15px;
+}
+
+.hero-button{
+    width:fit-content;
+    margin-top:30px;
+    background:linear-gradient(135deg,#7c3aed,#a855f7);
+    border:none;
+    color:white;
+    padding:14px 23px;
+    border-radius:10px;
+    font-weight:700;
+    box-shadow:0 10px 35px rgba(124,58,237,.25);
+}
+
+.flow{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+    margin-top:55px;
+}
+
+.flow-card{
+    background:#11101d;
+    border:1px solid #27243c;
+    padding:18px;
+    border-radius:13px;
+}
+
+.flow-card span{
+    font-size:20px;
+}
+
+.flow-card h4{
+    margin-top:13px;
+    font-size:13px;
+}
+
+.flow-card p{
+    margin-top:6px;
+    font-size:11px;
+}
+
+/* CARDS */
+
+.card{
+    background:#11101d;
+    border:1px solid #27243c;
+    border-radius:15px;
+    padding:20px;
+}
+
+.card-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:18px;
+}
+
+.card-title h3{
+    font-size:15px;
+}
+
+.card-title span{
+    color:#817d97;
+    font-size:11px;
+}
+
+.grid{
+    display:grid;
+    gap:16px;
+}
+
+.grid-4{
+    grid-template-columns:repeat(4,1fr);
+}
+
+.grid-3{
+    grid-template-columns:repeat(3,1fr);
+}
+
+.grid-2{
+    grid-template-columns:repeat(2,1fr);
+}
+
+/* CLICKABLE STATS */
+
+.stat{
+    position:relative;
+    overflow:hidden;
+    transition:.2s;
+    cursor:pointer;
+}
+
+.stat:hover{
+    transform:translateY(-3px);
+    border-color:#6245a4;
+    background:#17152a;
+}
+
+.stat-number{
+    font-size:27px;
+    font-weight:800;
+}
+
+.stat-label{
+    color:#838096;
+    font-size:11px;
+    margin-top:5px;
+    max-width:130px;
+}
+
+.stat-icon{
+    position:absolute;
+    right:17px;
+    top:17px;
+    font-size:22px;
+}
+
+.stat-hint{
+    font-size:9px;
+    color:#6f6b81;
+    margin-top:9px;
+}
+
+/* PRIORITIES */
+
+.priority{
+    padding:14px;
+    background:#171526;
+    border:1px solid #292641;
+    border-radius:10px;
+    margin-bottom:9px;
+}
+
+.priority:last-child{
+    margin-bottom:0;
+}
+
+.priority-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+}
+
+.priority h4{
+    font-size:12px;
+}
+
+.priority p{
+    color:#89859b;
+    font-size:11px;
+    margin-top:5px;
+    line-height:1.5;
+}
+
+.tag{
+    font-size:9px;
+    padding:4px 7px;
+    border-radius:5px;
+    font-weight:700;
+    white-space:nowrap;
+}
+
+.tag-red{
+    background:#3a1823;
+    color:#fb7185;
+}
+
+.tag-yellow{
+    background:#352b13;
+    color:#facc15;
+}
+
+.tag-purple{
+    background:#291b43;
+    color:#c4b5fd;
+}
+
+.tag-green{
+    background:#12291f;
+    color:#4ade80;
+}
+
+/* ANNOUNCEMENTS */
+
+.announcement{
+    background:#151422;
+    border:1px solid #28253b;
+    border-radius:13px;
+    padding:17px;
+    margin-bottom:11px;
+    transition:.2s;
+}
+
+.announcement:hover{
+    border-color:#41365d;
+}
+
+.announcement-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.source{
+    color:#a78bfa;
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:.5px;
+}
+
+.announcement h4{
+    margin-top:9px;
+    font-size:13px;
+}
+
+.announcement p{
+    color:#858197;
+    font-size:11px;
+    line-height:1.5;
+    margin-top:6px;
+}
+
+.announcement-actions{
+    display:flex;
+    gap:7px;
+    margin-top:13px;
+    flex-wrap:wrap;
+}
+
+.small-btn{
+    border:1px solid #37334d;
+    background:#1a1829;
+    color:#b4afc5;
+    padding:7px 10px;
+    border-radius:7px;
+    font-size:10px;
+}
+
+.small-btn:hover{
+    background:#25213a;
+    color:white;
+}
+
+.small-btn.done{
+    color:#4ade80;
+    border-color:#245737;
+}
+
+/* FILTER BAR */
+
+.filter-bar{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-bottom:16px;
+}
+
+.filter{
+    padding:8px 13px;
+    border-radius:8px;
+    border:1px solid #302d43;
+    background:#141320;
+    color:#8e899f;
+    font-size:10px;
+}
+
+.filter.active,
+.filter:hover{
+    background:#281e49;
+    border-color:#6345a8;
+    color:#c4b5fd;
+}
+
+/* ANALYZER */
+
+textarea{
+    width:100%;
+    min-height:170px;
+    background:#0d0c17;
+    border:1px solid #302d45;
+    border-radius:11px;
+    padding:15px;
+    color:white;
+    resize:vertical;
+    font-family:inherit;
+    outline:none;
+}
+
+textarea:focus{
+    border-color:#7c3aed;
+}
+
+.analyze-btn{
+    margin-top:12px;
+    background:linear-gradient(135deg,#7c3aed,#a855f7);
+    border:none;
+    color:white;
+    padding:11px 17px;
+    border-radius:8px;
+    font-weight:600;
+}
+
+.analysis-result{
+    margin-top:18px;
+    display:none;
+    background:#171526;
+    border:1px solid #302b4c;
+    padding:18px;
+    border-radius:11px;
+}
+
+.result-row{
+    display:flex;
+    gap:12px;
+    margin-bottom:13px;
+}
+
+.result-label{
+    width:85px;
+    color:#79758b;
+    font-size:10px;
+}
+
+.result-value{
+    font-size:11px;
+    color:#ddd8ec;
+}
+
+/* SMART SUMMARY */
+
+.summary-box{
+    margin-top:16px;
+    background:#151322;
+    border:1px solid #302b4b;
+    border-radius:12px;
+    padding:17px;
+}
+
+.summary-box h4{
+    font-size:12px;
+    color:#c4b5fd;
+    margin-bottom:10px;
+}
+
+.summary-line{
+    display:flex;
+    gap:10px;
+    margin-bottom:9px;
+    font-size:10px;
+    color:#aaa5b9;
+}
+
+.summary-line strong{
+    color:#eeeaf7;
+}
+
+/* TIMETABLE */
+
+.week{
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:8px;
+}
+
+.day{
+    background:#11101d;
+    border:1px solid #27243c;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+.day-header{
+    text-align:center;
+    padding:12px 5px;
+    background:#171526;
+    font-size:11px;
+    font-weight:700;
+}
+
+.class-item{
+    margin:7px;
+    padding:10px;
+    border-radius:8px;
+    background:#1b1830;
+    border-left:3px solid #8b5cf6;
+}
+
+.class-item h4{
+    font-size:10px;
+}
+
+.class-item p{
+    color:#807c91;
+    font-size:9px;
+    margin-top:4px;
+}
+
+.rescheduled{
+    border-left-color:#f59e0b;
+}
+
+/* ATTENDANCE */
+
+.attendance-item{
+    margin-bottom:18px;
+}
+
+.attendance-top{
+    display:flex;
+    justify-content:space-between;
+    font-size:11px;
+    margin-bottom:7px;
+}
+
+.progress{
+    height:7px;
+    background:#252237;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.progress-bar{
+    height:100%;
+    border-radius:20px;
+    background:linear-gradient(90deg,#7c3aed,#c084fc);
+}
+
+/* OPPORTUNITIES */
+
+.opportunity{
+    background:#151422;
+    border:1px solid #28253b;
+    border-radius:13px;
+    padding:17px;
+}
+
+.opp-icon{
+    width:38px;
+    height:38px;
+    border-radius:9px;
+    background:#261c40;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
+}
+
+.opportunity h4{
+    margin-top:12px;
+    font-size:13px;
+}
+
+.opportunity p{
+    color:#817d91;
+    font-size:10px;
+    margin-top:6px;
+    line-height:1.5;
+}
+
+.opp-meta{
+    display:flex;
+    justify-content:space-between;
+    margin-top:14px;
+    color:#918ca1;
+    font-size:9px;
+}
+
+/* CHAT */
+
+.chat-box{
+    max-width:850px;
+}
+
+.chat-messages{
+    min-height:430px;
+    max-height:500px;
+    overflow-y:auto;
+    background:#0e0d18;
+    border:1px solid #27243c;
+    border-radius:14px;
+    padding:18px;
+}
+
+.message{
+    max-width:75%;
+    padding:12px 14px;
+    border-radius:11px;
+    margin-bottom:10px;
+    font-size:11px;
+    line-height:1.6;
+}
+
+.message.ai{
+    background:#1a1729;
+    border:1px solid #292440;
+    color:#d5d0e3;
+}
+
+.message.user{
+    background:#50329a;
+    margin-left:auto;
+    color:white;
+}
+
+.chat-input{
+    display:flex;
+    gap:8px;
+    margin-top:10px;
+}
+
+.chat-input input{
+    flex:1;
+    background:#11101d;
+    border:1px solid #302d45;
+    border-radius:9px;
+    padding:12px;
+    color:white;
+    outline:none;
+}
+
+.chat-input button{
+    border:none;
+    background:#7c3aed;
+    color:white;
+    border-radius:9px;
+    padding:0 20px;
+}
+
+/* CONFLICT */
+
+.conflict{
+    border:1px solid #5b2635;
+    background:#24141c;
+    padding:16px;
+    border-radius:11px;
+}
+
+.conflict h4{
+    color:#fb7185;
+    font-size:12px;
+}
+
+.conflict p{
+    color:#b49ca4;
+    font-size:10px;
+    margin-top:6px;
+    line-height:1.5;
+}
+
+.warning{
+    margin-top:8px;
+    padding:9px;
+    border-radius:7px;
+    background:#302318;
+    color:#fbbf24;
+    font-size:9px;
+}
+
+/* SECTION HEADER */
+
+.section-heading{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+}
+
+.section-heading h3{
+    font-size:15px;
+}
+
+.section-heading span{
+    color:#77738a;
+    font-size:10px;
+}
+
+/* TOAST */
+
+.toast{
+    position:fixed;
+    right:25px;
+    bottom:25px;
+    background:#1c1830;
+    border:1px solid #4b3a75;
+    color:#ddd8ed;
+    padding:12px 16px;
+    border-radius:9px;
+    font-size:11px;
+    opacity:0;
+    transform:translateY(10px);
+    pointer-events:none;
+    transition:.25s;
+    z-index:100;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translateY(0);
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1000px){
+
+    .sidebar{
+        width:200px;
+    }
+
+    .main{
+        margin-left:200px;
+        width:calc(100% - 200px);
+    }
+
+    .grid-4{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .flow{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .week{
+        overflow-x:auto;
+        grid-template-columns:repeat(6,170px);
+    }
+}
+
+@media(max-width:700px){
+
+    .sidebar{
+        display:none;
+    }
+
+    .main{
+        margin-left:0;
+        width:100%;
+        padding:20px;
+    }
+
+    .grid-4,
+    .grid-3,
+    .grid-2{
+        grid-template-columns:1fr;
+    }
+
+    .hero h1{
+        font-size:43px;
+    }
+
+    .flow{
+        grid-template-columns:1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- ================= SIDEBAR ================= -->
+
+<aside class="sidebar">
+
+    <div class="logo">
+        <h1>Campus AI</h1>
+        <p>Student Information Assistant</p>
+    </div>
+
+    <div class="nav-title">MAIN</div>
+
+    <div class="nav-item active" onclick="showPage('home',this)">
+        <span class="nav-icon">⌂</span>
+        Home
+    </div>
+
+    <div class="nav-item" onclick="showPage('dashboard',this)">
+        <span class="nav-icon">◈</span>
+        Dashboard
+    </div>
+
+    <div class="nav-item" onclick="showPage('announcements',this)">
+        <span class="nav-icon">◉</span>
+        Announcements
+    </div>
+
+    <div class="nav-item" onclick="showPage('timetable',this)">
+        <span class="nav-icon">▦</span>
+        Timetable
+    </div>
+
+    <div class="nav-item" onclick="showPage('attendance',this)">
+        <span class="nav-icon">✓</span>
+        Attendance
+    </div>
+
+    <div class="nav-title">DISCOVER</div>
+
+    <div class="nav-item" onclick="showPage('opportunities',this)">
+        <span class="nav-icon">✦</span>
+        Opportunities
+    </div>
+
+    <div class="nav-item" onclick="showPage('chat',this)">
+        <span class="nav-icon">◌</span>
+        Ask Campus AI
+    </div>
+
+</aside>
+
+
+<main class="main">
+
+<!-- ================= HOME ================= -->
+
+<section id="home" class="page active">
+
+    <div class="hero">
+
+        <span class="hero-badge">
+            ✦ AI-POWERED CAMPUS ASSISTANT
+        </span>
+
+        <h1>
+            Less scrolling.<br>
+            <span class="gradient-text">More action.</span>
+        </h1>
+
+        <p>
+            Campus AI turns scattered college announcements into
+            clear, relevant and actionable information — so students
+            know what matters, what changed and what they need to do next.
+        </p>
+
+        <button class="hero-button"
+                onclick="openDashboard()">
+            Explore Dashboard →
+        </button>
+
+        <div class="flow">
+
+            <div class="flow-card">
+                <span>📥</span>
+                <h4>Collect</h4>
+                <p>Gather announcements from different campus sources.</p>
+            </div>
+
+            <div class="flow-card">
+                <span>🧠</span>
+                <h4>Understand</h4>
+                <p>Extract deadlines, changes and important details.</p>
+            </div>
+
+            <div class="flow-card">
+                <span>🎯</span>
+                <h4>Prioritize</h4>
+                <p>Show students what needs attention first.</p>
+            </div>
+
+            <div class="flow-card">
+                <span>⚡</span>
+                <h4>Act</h4>
+                <p>Turn information into simple next steps.</p>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= DASHBOARD ================= -->
+
+<section id="dashboard" class="page">
+
+    <div class="topbar">
+
+        <div>
+            <h2>YOUR CAMPUS, SORTED</h2>
+            <p>
+                Good morning, Asmita 👋 Here's what actually matters today.
+            </p>
+        </div>
+
+        <div class="profile">
+            <div class="avatar">A</div>
+        </div>
+
+    </div>
+
+
+    <!-- CLICKABLE CAMPUS BRIEF -->
+
+    <div class="card" style="margin-bottom:16px;">
+
+        <div class="card-title">
+            <h3>Today's Campus Brief</h3>
+            <span>Updated just now</span>
+        </div>
+
+        <div class="grid grid-4">
+
+            <div class="card stat"
+                 onclick="showFilteredAnnouncements('all')">
+
+                <div class="stat-number">47</div>
+                <div class="stat-label">
+                    Announcements processed
+                </div>
+
+                <div class="stat-icon">📥</div>
+
+                <div class="stat-hint">
+                    Click to view →
+                </div>
+
+            </div>
+
+
+            <div class="card stat"
+                 onclick="showFilteredAnnouncements('duplicate')">
+
+                <div class="stat-number">12</div>
+                <div class="stat-label">
+                    Repeated messages detected
+                </div>
+
+                <div class="stat-icon">↻</div>
+
+                <div class="stat-hint">
+                    View repeated →
+                </div>
+
+            </div>
+
+
+            <div class="card stat"
+                 onclick="showFilteredAnnouncements('deadline')">
+
+                <div class="stat-number">8</div>
+                <div class="stat-label">
+                    Upcoming deadlines
+                </div>
+
+                <div class="stat-icon">⏰</div>
+
+                <div class="stat-hint">
+                    View deadlines →
+                </div>
+
+            </div>
+
+
+            <div class="card stat"
+                 onclick="showFilteredAnnouncements('schedule')">
+
+                <div class="stat-number">3</div>
+                <div class="stat-label">
+                    Schedule changes
+                </div>
+
+                <div class="stat-icon">📅</div>
+
+                <div class="stat-hint">
+                    View changes →
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="grid grid-2">
+
+        <!-- PRIORITIES -->
+
+        <div class="card">
+
+            <div class="card-title">
+                <h3>Today's Priorities</h3>
+                <span>Ranked by urgency</span>
+            </div>
+
+
+            <div class="priority">
+
+                <div class="priority-top">
+                    <h4>PS Assignment Submission</h4>
+                    <span class="tag tag-red">URGENT</span>
+                </div>
+
+                <p>
+                    Probability & Statistics assignment is due tomorrow.
+                    Submit through the assigned portal.
+                </p>
+
+            </div>
+
+
+            <div class="priority">
+
+                <div class="priority-top">
+                    <h4>CS Communication Skills Activity</h4>
+                    <span class="tag tag-yellow">TODAY</span>
+                </div>
+
+                <p>
+                    Group speaking activity scheduled during today's
+                    Communication Skills class.
+                </p>
+
+            </div>
+
+
+            <div class="priority">
+
+                <div class="priority-top">
+                    <h4>Minerva Recruitment</h4>
+                    <span class="tag tag-purple">OPPORTUNITY</span>
+                </div>
+
+                <p>
+                    Applications close tonight. Consider applying if
+                    the role matches your interests.
+                </p>
+
+            </div>
+
+
+            <div class="priority">
+
+                <div class="priority-top">
+                    <h4>BEE Practical Schedule</h4>
+                    <span class="tag tag-green">UPDATED</span>
+                </div>
+
+                <p>
+                    Practical slot has been moved to Friday.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- CONFLICT -->
+
+        <div class="card">
+
+            <div class="card-title">
+                <h3>Schedule Conflict</h3>
+                <span>Needs attention</span>
+            </div>
+
+            <div class="conflict">
+
+                <h4>⚠ Possible Clash Detected</h4>
+
+                <p>
+                    Your BEE practical and a society orientation
+                    appear to overlap on Friday afternoon.
+                </p>
+
+                <div class="warning">
+                    Information may be incomplete. Verify the original
+                    announcements before deciding what to do.
+                </div>
+
+            </div>
+
+
+            <div style="margin-top:18px;">
+
+                <div class="card-title">
+                    <h3>Next Class</h3>
+                    <span>10:00 AM</span>
+                </div>
+
+                <div class="priority">
+
+                    <div class="priority-top">
+                        <h4>Programming with Python</h4>
+                        <span class="tag tag-purple">PWP</span>
+                    </div>
+
+                    <p>
+                        Lab 2 • Academic Block
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ACTION PLAN -->
+
+    <div class="card" style="margin-top:16px;">
+
+        <div class="card-title">
+            <h3>Suggested Action Plan</h3>
+            <span>Based on today's information</span>
+        </div>
+
+        <div class="grid grid-3">
+
+            <div class="summary-box">
+
+                <h4>01 • Do first</h4>
+
+                <div class="summary-line">
+                    <strong>PS Assignment</strong>
+                </div>
+
+                <div class="summary-line">
+                    Verify requirements and submit before the deadline.
+                </div>
+
+            </div>
+
+
+            <div class="summary-box">
+
+                <h4>02 • Check</h4>
+
+                <div class="summary-line">
+                    <strong>BEE Schedule</strong>
+                </div>
+
+                <div class="summary-line">
+                    Verify the changed practical slot.
+                </div>
+
+            </div>
+
+
+            <div class="summary-box">
+
+                <h4>03 • Don't miss</h4>
+
+                <div class="summary-line">
+                    <strong>Minerva Recruitment</strong>
+                </div>
+
+                <div class="summary-line">
+                    Applications close tonight.
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= ANNOUNCEMENTS ================= -->
+
+<section id="announcements" class="page">
+
+    <div class="topbar">
+
+        <div>
+            <h2>Announcements</h2>
+            <p>
+                From campus noise to clear actions.
+            </p>
+        </div>
+
+    </div>
+
+
+    <!-- FILTER BUTTONS -->
+
+    <div class="filter-bar">
+
+        <button class="filter active"
+                onclick="filterAnnouncements('all',this)">
+            All
+        </button>
+
+        <button class="filter"
+                onclick="filterAnnouncements('deadline',this)">
+            Deadlines
+        </button>
+
+        <button class="filter"
+                onclick="filterAnnouncements('schedule',this)">
+            Schedule Changes
+        </button>
+
+        <button class="filter"
+                onclick="filterAnnouncements('duplicate',this)">
+            Repeated
+        </button>
+
+        <button class="filter"
+                onclick="filterAnnouncements('opportunity',this)">
+            Opportunities
+        </button>
+
+    </div>
+
+
+    <!-- ANALYZER -->
+
+    <div class="card" style="margin-bottom:18px;">
+
+        <div class="card-title">
+            <h3>Announcement Analyzer</h3>
+            <span>Source-aware analysis</span>
+        </div>
+
+        <textarea
+            id="announcementInput"
+            placeholder="Paste a college announcement here...">
+        </textarea>
+
+        <button class="analyze-btn"
+                onclick="analyzeAnnouncement()">
+            Analyze Announcement
+        </button>
+
+
+        <div class="analysis-result"
+             id="analysisResult">
+
+            <div class="result-row">
+                <div class="result-label">Priority</div>
+
+                <div class="result-value">
+                    <span class="tag tag-red">HIGH</span>
+                </div>
+            </div>
+
+
+            <div class="result-row">
+                <div class="result-label">Deadline</div>
+
+                <div class="result-value">
+                    Tomorrow, 11:59 PM
+                </div>
+            </div>
+
+
+            <div class="result-row">
+                <div class="result-label">Action</div>
+
+                <div class="result-value">
+                    Submit the required assignment through the specified portal.
+                </div>
+            </div>
+
+
+            <div class="result-row">
+                <div class="result-label">Source</div>
+
+                <div class="result-value">
+                    Department announcement
+                </div>
+            </div>
+
+
+            <div class="result-row">
+                <div class="result-label">Why it matters</div>
+
+                <div class="result-value">
+                    The deadline is approaching and submission is required.
+                </div>
+            </div>
+
+
+            <div class="result-row">
+                <div class="result-label">Trust</div>
+
+                <div class="result-value">
+                    Source identified • Verify details before acting
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- FEED -->
+
+    <div class="card">
+
+        <div class="card-title">
+            <h3 id="announcementTitle">
+                Important Announcements
+            </h3>
+
+            <span id="announcementCount">
+                6 updates
+            </span>
+        </div>
+
+
+        <div id="announcementList">
+
+
+            <!-- PS -->
+
+            <div class="announcement"
+                 data-category="deadline">
+
+                <div class="announcement-header">
+
+                    <span class="source">
+                        DEPARTMENT • PS
+                    </span>
+
+                    <span class="tag tag-red">
+                        DEADLINE
+                    </span>
+
+                </div>
+
+                <h4>
+                    Probability & Statistics Assignment
+                </h4>
+
+                <p>
+                    Assignment 2 must be submitted by tomorrow at
+                    11:59 PM. Students are advised to verify their
+                    submission before the deadline.
+                </p>
+
+                <div class="announcement-actions">
+
+                    <button class="small-btn"
+                            onclick="saveItem(this)">
+                        ☆ Save
+                    </button>
+
+                    <button class="small-btn"
+                            onclick="markDone(this)">
+                        ✓ Mark as Done
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- BEE -->
+
+            <div class="announcement"
+                 data-category="schedule">
+
+                <div class="announcement-header">
+
+                    <span class="source">
+                        DEPARTMENT • BEE
+                    </span>
+
+                    <span class="tag tag-yellow">
+                        SCHEDULE
+                    </span>
+
+                </div>
+
+                <h4>
+                    BEE Practical Schedule Updated
+                </h4>
+
+                <p>
+                    Friday's Basic Electrical Engineering practical
+                    has been shifted to a different slot. Check the
+                    department schedule before attending.
+                </p>
+
+                <div class="announcement-actions">
+
+                    <button class="small-btn"
+                            onclick="saveItem(this)">
+                        ☆ Save
+                    </button>
+
+                    <button class="small-btn"
+                            onclick="markDone(this)">
+                        ✓ Mark as Done
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- PWP -->
+
+            <div class="announcement"
+                 data-category="duplicate">
+
+                <div class="announcement-header">
+
+                    <span class="source">
+                        DEPARTMENT • PWP
+                    </span>
+
+                    <span class="tag tag-purple">
+                        REPEATED
+                    </span>
+
+                </div>
+
+                <h4>
+                    Programming with Python Lab Submission
+                </h4>
+
+                <p>
+                    This information appeared in multiple campus
+                    messages. The latest message asks students to
+                    complete the practical file before the next lab.
+                </p>
+
+                <div class="announcement-actions">
+
+                    <button class="small-btn"
+                            onclick="saveItem(this)">
+                        ☆ Save
+                    </button>
+
+                    <button class="small-btn"
+                            onclick="markDone(this)">
+                        ✓ Mark as Done
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- CS -->
+
+            <div class="announcement"
+                 data-category="deadline">
+
+                <div class="announcement-header">
+
+                    <span class="source">
+                        DEPARTMENT • CS
+                    </span>
+
+                    <span class="tag tag-yellow">
+                        TODAY
+                    </span>
+
+                </div>
+
+                <h4>
+                    Communication Skills Group Activity
+                </h4>
+
+                <p>
+                    Students will participate in a group communication
+                    activity during today's Communication Skills class.
+                </p>
+
+                <div class="announcement-actions">
+
+                    <button class="small-btn"
+                            onclick="saveItem(this)">
+                        ☆ Save
+                    </button>
+
+                    <button class="small-btn"
+                            onclick="markDone(this)">
+                        ✓ Mark as Done
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- EVS -->
+
+            <div class="announcement"
+                 data-category="duplicate">
+
+                <div class="announcement-header">
+
+                    <span class="source">
+                        COLLEGE • EVS
+                    </span>
+
+                    <span class="tag tag-green">
+                        REPEATED
+                    </span>
+
+                </div>
+
+                <h4>
+                    Environmental Studies Project Guidelines
+                </h4>
+
+                <p>
+                    Updated project guidelines have been uploaded.
+                    Similar information was also circulated earlier.
+                    Students should review the latest version.
+                </p>
+
+                <div class="announcement-actions">
+
+                    <button class="small-btn"
+                            onclick="saveItem(this)">
+                        ☆ Save
+                    </button>
+
+                    <button class="small-btn"
+                            onclick="markDone(this)">
+                        ✓ Mark as Done
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- OPPORTUNITY -->
+
+            <div class="announcement"
+                 data-category="opportunity">
+
+                <div class="announcement-header">
+
+                    <span class="source">
+                        SOCIETY • MINERVA
+                    </span>
+
+                    <span class="tag tag-purple">
+                        OPPORTUNITY
+                    </span>
+
+                </div>
+
+                <h4>
+                    Minerva Recruitment Applications
+                </h4>
+
+                <p>
+                    Recruitment applications are currently open.
+                    Interested students should check the official
+                    recruitment information before applying.
+                </p>
+
+                <div class="announcement-actions">
+
+                    <button class="small-btn"
+                            onclick="saveItem(this)">
+                        ☆ Save
+                    </button>
+
+                    <button class="small-btn"
+                            onclick="markDone(this)">
+                        ✓ Mark as Done
+                    </button>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= TIMETABLE ================= -->
+
+<section id="timetable" class="page">
+
+    <div class="topbar">
+
+        <div>
+            <h2>Smart Timetable</h2>
+            <p>
+                Your week at a glance.
+            </p>
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <div class="card-title">
+            <h3>CSE-AI • Semester 1</h3>
+            <span>Sample timetable</span>
+        </div>
+
+        <div class="week">
+
+
+            <!-- MONDAY -->
+
+            <div class="day">
+
+                <div class="day-header">
+                    MON
+                </div>
+
+                <div class="class-item">
+                    <h4>PS</h4>
+                    <p>
+                        Probability & Statistics<br>
+                        9:00 – 10:00
+                    </p>
+                </div>
+
+                <div class="class-item">
+                    <h4>PWP</h4>
+                    <p>
+                        Programming with Python<br>
+                        10:00 – 11:00
+                    </p>
+                </div>
+
+                <div class="class-item">
+                    <h4>CS</h4>
+                    <p>
+                        Communication Skills<br>
+                        2:00 – 3:00
+                    </p>
+                </div>
+
+            </div>
+
+
+            <!-- TUESDAY -->
+
+            <div class="day">
+
+                <div class="day-header">
+                    TUE
+                </div>
+
+                <div class="class-item">
+                    <h4>BEE</h4>
+                    <p>
+                        Basic Electrical Engineering<br>
+                        9:00 – 10:00
+                    </p>
+                </div>
+
+                <div class="class-item">
+                    <h4>EVS</h4>
+                    <p>
+                        Environmental Studies<br>
+                        11:00 – 12:00
+                    </p>
+                </div>
+
+                <div class="class-item">
+                    <h4>ITW</h4>
+                    <p>
+                        IT Workshop<br>
+                        2:00 – 4:00
+                    </p>
+                </div>
+
+            </div>
+
+
+            <!-- WEDNESDAY -->
+
+            <div class="day">
+
+                <div class="day-header">
+                    WED
+                </div>
+
+                <div class="class-item">
+                    <h4>CS</h4>
+                    <p>
+                        Communication Skills<br>
+                        9:00 – 10:00
+                    </p>
+                </div>
+
+                <div class="class-item rescheduled">
+                    <h4>PWP ⚠</h4>
+                    <p>
+                        Rescheduled<br>
+                        12:00 – 1:00
+                    </p>
+                </div>
+
+                <div class="class-item">
+                    <h4>PS</h4>
+                    <p>
+                        Probability & Statistics<br>
+                        2:00 – 3:00
+                    </p>
+                </div>
+
+            </div>
+
+
+            <!-- THURSDAY -->
+
+            <div class="day">
+
+                <div class="day-header">
+                    THU
+                </div>
+
+                <div class="class-item">
+                    <h4>EVS</h4>
+                    <p>
+                        Environmental Studies<br>
+                        9:00 – 10:00
+                    </p>
+                </div>
+
+                <div class="class-item">
+                    <h4>BEE</h4>
+                    <p>
+                        Basic Electrical Engineering<br>
+                        11:00 – 12:00
+                    </p>
+                </div>
+
+                <div class="class-item">
+                    <h4>PWP</h4>
+                    <p>
+                        Programming with Python<br>
+                        2:00 – 3:00
+                    </p>
+                </div>
+
+            </div>
+
+
+            <!-- FRIDAY -->
+
+            <div class="day">
+
+                <div class="day-header">
+                    FRI
+                </div>
+
+                <div class="class-item">
+                    <h4>ITW</h4>
+                    <p>
+                        IT Workshop<br>
+                        9:00 – 11:00
+                    </p>
+                </div>
+
+                <div class="class-item rescheduled">
+                    <h4>BEE ⚠</h4>
+                    <p>
+                        Practical<br>
+                        1:00 – 3:00
+                    </p>
+                </div>
+
+                <div class="class-item">
+                    <h4>PS</h4>
+                    <p>
+                        Probability & Statistics<br>
+                        3:00 – 4:00
+                    </p>
+                </div>
+
+            </div>
+
+
+            <!-- SATURDAY -->
+
+            <div class="day">
+
+                <div class="day-header">
+                    SAT
+                </div>
+
+                <div class="class-item">
+                    <h4>PWP</h4>
+                    <p>
+                        Programming with Python<br>
+                        9:00 – 10:00
+                    </p>
+                </div>
+
+                <div class="class-item">
+                    <h4>CS</h4>
+                    <p>
+                        Communication Skills<br>
+                        11:00 – 12:00
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= ATTENDANCE ================= -->
+
+<section id="attendance" class="page">
+
+    <div class="topbar">
+
+        <div>
+            <h2>Attendance</h2>
+            <p>
+                Keep track of your semester attendance.
+            </p>
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <div class="card-title">
+            <h3>CSE-AI • Semester 1</h3>
+            <span>Demo data</span>
+        </div>
+
+
+        <div class="attendance-item">
+
+            <div class="attendance-top">
+                <span>Basic Electrical Engineering</span>
+                <span>86%</span>
+            </div>
+
+            <div class="progress">
+                <div class="progress-bar"
+                     style="width:86%">
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="attendance-item">
+
+            <div class="attendance-top">
+                <span>Probability & Statistics</span>
+                <span>91%</span>
+            </div>
+
+            <div class="progress">
+                <div class="progress-bar"
+                     style="width:91%">
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="attendance-item">
+
+            <div class="attendance-top">
+                <span>Environmental Studies</span>
+                <span>88%</span>
+            </div>
+
+            <div class="progress">
+                <div class="progress-bar"
+                     style="width:88%">
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="attendance-item">
+
+            <div class="attendance-top">
+                <span>Programming with Python</span>
+                <span>82%</span>
+            </div>
+
+            <div class="progress">
+                <div class="progress-bar"
+                     style="width:82%">
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="attendance-item">
+
+            <div class="attendance-top">
+                <span>IT Workshop</span>
+                <span>94%</span>
+            </div>
+
+            <div class="progress">
+                <div class="progress-bar"
+                     style="width:94%">
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="attendance-item">
+
+            <div class="attendance-top">
+                <span>Communication Skills</span>
+                <span>89%</span>
+            </div>
+
+            <div class="progress">
+                <div class="progress-bar"
+                     style="width:89%">
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= OPPORTUNITIES ================= -->
+
+<section id="opportunities" class="page">
+
+    <div class="topbar">
+
+        <div>
+            <h2>Opportunities</h2>
+            <p>
+                Discover things worth knowing about.
+            </p>
+        </div>
+
+    </div>
+
+
+    <div class="filter-bar">
+
+        <button class="filter active"
+                onclick="filterOpp('all',this)">
+            All
+        </button>
+
+        <button class="filter"
+                onclick="filterOpp('society',this)">
+            Societies
+        </button>
+
+        <button class="filter"
+                onclick="filterOpp('hackathon',this)">
+            Hackathons
+        </button>
+
+        <button class="filter"
+                onclick="filterOpp('internship',this)">
+            Internships
+        </button>
+
+        <button class="filter"
+                onclick="filterOpp('workshop',this)">
+            Workshops
+        </button>
+
+    </div>
+
+
+    <div class="grid grid-3"
+         id="opportunityGrid">
+
+
+        <div class="opportunity"
+             data-type="society">
+
+            <div class="opp-icon">
+                🌐
+            </div>
+
+            <h4>
+                Minerva Recruitment
+            </h4>
+
+            <p>
+                Technology society recruitment is currently open.
+                Research and Outreach roles available.
+            </p>
+
+            <div class="opp-meta">
+                <span>Society</span>
+                <span>Deadline: Today</span>
+            </div>
+
+            <button class="small-btn"
+                    style="margin-top:12px;"
+                    onclick="saveOpportunity(this)">
+                ☆ Save Opportunity
+            </button>
+
+        </div>
+
+
+        <div class="opportunity"
+             data-type="hackathon">
+
+            <div class="opp-icon">
+                ⚡
+            </div>
+
+            <h4>
+                Campus Hackathon
+            </h4>
+
+            <p>
+                Student teams can build solutions around campus
+                problems and present their prototypes.
+            </p>
+
+            <div class="opp-meta">
+                <span>Hackathon</span>
+                <span>2 weeks left</span>
+            </div>
+
+            <button class="small-btn"
+                    style="margin-top:12px;"
+                    onclick="saveOpportunity(this)">
+                ☆ Save Opportunity
+            </button>
+
+        </div>
+
+
+        <div class="opportunity"
+             data-type="workshop">
+
+            <div class="opp-icon">
+                💻
+            </div>
+
+            <h4>
+                Python Beginner Workshop
+            </h4>
+
+            <p>
+                Introductory programming workshop designed for
+                first-year students.
+            </p>
+
+            <div class="opp-meta">
+                <span>Workshop</span>
+                <span>Saturday</span>
+            </div>
+
+            <button class="small-btn"
+                    style="margin-top:12px;"
+                    onclick="saveOpportunity(this)">
+                ☆ Save Opportunity
+            </button>
+
+        </div>
+
+
+        <div class="opportunity"
+             data-type="internship">
+
+            <div class="opp-icon">
+                🚀
+            </div>
+
+            <h4>
+                Student Research Internship
+            </h4>
+
+            <p>
+                Undergraduate students can apply for a short-term
+                research opportunity.
+            </p>
+
+            <div class="opp-meta">
+                <span>Internship</span>
+                <span>Deadline: 5 days</span>
+            </div>
+
+            <button class="small-btn"
+                    style="margin-top:12px;"
+                    onclick="saveOpportunity(this)">
+                ☆ Save Opportunity
+            </button>
+
+        </div>
+
+
+        <div class="opportunity"
+             data-type="society">
+
+            <div class="opp-icon">
+                🎨
+            </div>
+
+            <h4>
+                Creative Society Orientation
+            </h4>
+
+            <p>
+                Freshers interested in design, media and creative
+                work can attend the orientation.
+            </p>
+
+            <div class="opp-meta">
+                <span>Society</span>
+                <span>Friday</span>
+            </div>
+
+            <button class="small-btn"
+                    style="margin-top:12px;"
+                    onclick="saveOpportunity(this)">
+                ☆ Save Opportunity
+            </button>
+
+        </div>
+
+
+        <div class="opportunity"
+             data-type="hackathon">
+
+            <div class="opp-icon">
+                🧠
+            </div>
+
+            <h4>
+                AI Innovation Challenge
+            </h4>
+
+            <p>
+                Teams are invited to develop innovative applications
+                using AI and emerging technologies.
+            </p>
+
+            <div class="opp-meta">
+                <span>Hackathon</span>
+                <span>10 days left</span>
+            </div>
+
+            <button class="small-btn"
+                    style="margin-top:12px;"
+                    onclick="saveOpportunity(this)">
+                ☆ Save Opportunity
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= CHAT ================= -->
+
+<section id="chat" class="page">
+
+    <div class="topbar">
+
+        <div>
+            <h2>Ask Campus AI</h2>
+            <p>
+                Ask questions about your campus information.
+            </p>
+        </div>
+
+    </div>
+
+
+    <div class="chat-box">
+
+        <div class="chat-messages"
+             id="chatMessages">
+
+            <div class="message ai">
+
+                Hi Asmita 👋 I'm your Campus AI assistant.
+
+                <br><br>
+
+                Try asking:
+
+                <br><br>
+
+                • What do I have tomorrow?<br>
+                • What deadlines are coming up?<br>
+                • Do I have any schedule conflicts?<br>
+                • What opportunities are available?<br>
+                • What does CS mean?
+
+            </div>
+
+        </div>
+
+
+        <div class="chat-input">
+
+            <input
+                id="chatInput"
+                placeholder="Ask something about your campus..."
+                onkeydown="if(event.key==='Enter') sendMessage()"
+            >
+
+            <button onclick="sendMessage()">
+                Send
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+</main>
+</div>
+
+
+<!-- TOAST -->
+
+<div class="toast" id="toast">
+    Saved successfully
+</div>
+
+
+<script>
+
+/* ================= NAVIGATION ================= */
+
+function showPage(pageId, element){
+
+    document.querySelectorAll('.page').forEach(page=>{
+        page.classList.remove('active');
+    });
+
+    document.getElementById(pageId).classList.add('active');
+
+    document.querySelectorAll('.nav-item').forEach(item=>{
+        item.classList.remove('active');
+    });
+
+    if(element){
+        element.classList.add('active');
+    }
+
+    window.scrollTo({
+        top:0,
+        behavior:'smooth'
+    });
+}
+
+
+function openDashboard(){
+
+    const dashboardNav =
+        document.querySelectorAll('.nav-item')[1];
+
+    showPage('dashboard',dashboardNav);
+}
+
+
+/* ================= DASHBOARD STATISTICS ================= */
+
+function showFilteredAnnouncements(category){
+
+    const navItems =
+        document.querySelectorAll('.nav-item');
+
+    showPage('announcements',navItems[2]);
+
+    setTimeout(()=>{
+
+        if(category === 'all'){
+            filterAnnouncements('all',null);
+        }
+        else{
+            filterAnnouncements(category,null);
+        }
+
+    },100);
+}
+
+
+/* ================= ANNOUNCEMENT FILTER ================= */
+
+function filterAnnouncements(category,button){
+
+    const cards =
+        document.querySelectorAll('#announcementList .announcement');
+
+    document.querySelectorAll('.filter').forEach(btn=>{
+        btn.classList.remove('active');
+    });
+
+    if(button){
+        button.classList.add('active');
+    }
+    else{
+
+        document.querySelectorAll('.filter').forEach(btn=>{
+
+            const text =
+                btn.innerText.toLowerCase();
+
+            if(
+                (category === 'all' && text === 'all') ||
+                (category === 'deadline' && text.includes('deadline')) ||
+                (category === 'schedule' && text.includes('schedule')) ||
+                (category === 'duplicate' && text.includes('repeated')) ||
+                (category === 'opportunity' && text.includes('opportunit'))
+            ){
+                btn.classList.add('active');
+            }
+
+        });
+
+    }
+
+    let count = 0;
+
+    cards.forEach(card=>{
+
+        if(
+            category === 'all' ||
+            card.dataset.category === category
+        ){
+
+            card.style.display='block';
+            count++;
+
+        }
+        else{
+
+            card.style.display='none';
+
+        }
+
+    });
+
+    const title =
+        document.getElementById('announcementTitle');
+
+    const counter =
+        document.getElementById('announcementCount');
+
+    if(category === 'all'){
+        title.innerText='Important Announcements';
+    }
+    else if(category === 'deadline'){
+        title.innerText='Upcoming Deadlines';
+    }
+    else if(category === 'schedule'){
+        title.innerText='Schedule Changes';
+    }
+    else if(category === 'duplicate'){
+        title.innerText='Repeated Messages';
+    }
+    else if(category === 'opportunity'){
+        title.innerText='Campus Opportunities';
+    }
+
+    counter.innerText =
+        count + (count === 1 ? ' update' : ' updates');
+
+    window.scrollTo({
+        top:0,
+        behavior:'smooth'
+    });
+}
+
+
+/* ================= ANALYZER ================= */
+
+function analyzeAnnouncement(){
+
+    const input =
+        document.getElementById('announcementInput');
+
+    const result =
+        document.getElementById('analysisResult');
+
+    if(input.value.trim()===''){
+
+        showToast('Paste an announcement first.');
+
+        input.focus();
+
+        return;
+    }
+
+    result.style.display='block';
+
+    showToast('Announcement analyzed.');
+
+}
+
+
+/* ================= SAVE ================= */
+
+function saveItem(button){
+
+    if(button.innerText.includes('Saved')){
+
+        button.innerText='☆ Save';
+        button.classList.remove('done');
+
+        showToast('Removed from saved items.');
+
+    }
+    else{
+
+        button.innerText='★ Saved';
+        button.classList.add('done');
+
+        showToast('Announcement saved.');
+
+    }
+
+}
+
+
+/* ================= MARK DONE ================= */
+
+function markDone(button){
+
+    button.innerText='✓ Completed';
+    button.classList.add('done');
+
+    showToast('Marked as completed.');
+
+}
+
+
+/* ================= OPPORTUNITIES ================= */
+
+function filterOpp(type,button){
+
+    document.querySelectorAll('.filter').forEach(btn=>{
+        btn.classList.remove('active');
+    });
+
+    button.classList.add('active');
+
+    document.querySelectorAll('.opportunity').forEach(card=>{
+
+        if(type==='all'){
+
+            card.style.display='block';
+
+        }
+        else{
+
+            if(card.dataset.type===type){
+                card.style.display='block';
+            }
+            else{
+                card.style.display='none';
+            }
+
+        }
+
+    });
+
+}
+
+
+/* ================= SAVE OPPORTUNITY ================= */
+
+function saveOpportunity(button){
+
+    if(button.innerText.includes('Saved')){
+
+        button.innerText='☆ Save Opportunity';
+        button.classList.remove('done');
+
+        showToast('Opportunity removed.');
+
+    }
+    else{
+
+        button.innerText='★ Saved';
+        button.classList.add('done');
+
+        showToast('Opportunity saved.');
+
+    }
+
+}
+
+
+/* ================= CHAT ================= */
+
+function sendMessage(){
+
+    const input =
+        document.getElementById('chatInput');
+
+    const messages =
+        document.getElementById('chatMessages');
+
+    const text =
+        input.value.trim();
+
+    if(text==='') return;
+
+
+    const userMessage =
+        document.createElement('div');
+
+    userMessage.className='message user';
+
+    userMessage.innerText=text;
+
+    messages.appendChild(userMessage);
+
+    input.value='';
+
+
+    setTimeout(()=>{
+
+        const aiMessage =
+            document.createElement('div');
+
+        aiMessage.className='message ai';
+
+        const lower =
+            text.toLowerCase();
+
+
+        if(
+            lower.includes('tomorrow') ||
+            lower.includes('schedule')
+        ){
+
+            aiMessage.innerText =
+            'Based on the sample timetable, tomorrow includes BEE, EVS and IT Workshop. Check the Smart Timetable for the complete schedule.';
+
+        }
+
+        else if(
+            lower.includes('deadline') ||
+            lower.includes('due')
+        ){
+
+            aiMessage.innerText =
+            'The most urgent sample deadline is the Probability & Statistics assignment, shown as due tomorrow at 11:59 PM.';
+
+        }
+
+        else if(
+            lower.includes('conflict') ||
+            lower.includes('clash')
+        ){
+
+            aiMessage.innerText =
+            'A possible conflict was detected between the BEE practical and a society orientation. The system flags the conflict but does not decide which commitment you should choose.';
+
+        }
+
+        else if(
+            lower.includes('opportun')
+        ){
+
+            aiMessage.innerText =
+            'Current opportunities include Minerva recruitment, a campus hackathon, a Python workshop, a research internship and society orientations.';
+
+        }
+
+        else if(
+            lower.includes('cs') ||
+            lower.includes('communication')
+        ){
+
+            aiMessage.innerText =
+            'CS stands for Communication Skills in this CSE-AI Semester 1 prototype.';
+
+        }
+
+        else if(
+            lower.includes('pwp')
+        ){
+
+            aiMessage.innerText =
+            'PWP stands for Programming with Python.';
+
+        }
+
+        else if(
+            lower.includes('bee')
+        ){
+
+            aiMessage.innerText =
+            'BEE stands for Basic Electrical Engineering. A sample schedule change is currently shown for the BEE practical.';
+
+        }
+
+        else{
+
+            aiMessage.innerText =
+            'I can help you understand announcements, deadlines, timetable changes, conflicts, attendance and campus opportunities.';
+
+        }
+
+
+        messages.appendChild(aiMessage);
+
+        messages.scrollTop =
+            messages.scrollHeight;
+
+    },450);
+
+}
+
+
+/* ================= TOAST ================= */
+
+function showToast(message){
+
+    const toast =
+        document.getElementById('toast');
+
+    toast.innerText=message;
+
+    toast.classList.add('show');
+
+    setTimeout(()=>{
+        toast.classList.remove('show');
+    },2200);
+
+}
+
+</script>
+
+</body>
+</html>
