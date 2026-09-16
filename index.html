@@ -5,8 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Campus AI — Student Information Assistant</title>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
@@ -1031,166 +1029,60 @@ textarea:focus{border-color:#b88932;}
 }
 
 
-/* ================= SMART TIMETABLE — VISUAL REFRESH ================= */
-/* Appears last on purpose so it wins over the earlier theme rules above. */
+/* ================= DEMO LOGIN ================= */
+#authScreen{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px;background:radial-gradient(circle at 15% 20%,rgba(198,151,63,.18),transparent 32%),radial-gradient(circle at 85% 80%,rgba(106,76,28,.2),transparent 35%),#17130d;overflow:auto}
+.auth-shell{width:min(980px,100%);display:grid;grid-template-columns:1.05fr .95fr;border:1px solid #5a4526;border-radius:24px;overflow:hidden;background:#211a10;box-shadow:0 30px 90px rgba(0,0,0,.45)}
+.auth-visual{padding:48px;background:linear-gradient(145deg,#2d2214,#1c160e)}
+.auth-mark{display:inline-flex;padding:8px 12px;border:1px solid #72572a;border-radius:999px;color:#e1bb62;font-size:10px;letter-spacing:1.5px;font-weight:800}
+.auth-visual h1{font-size:44px;line-height:1.05;margin:24px 0 14px}.auth-visual h1 span{background:linear-gradient(90deg,#d6a84f,#f3d58a);-webkit-background-clip:text;-webkit-text-fill-color:transparent}.auth-visual p{color:#b7a98e;line-height:1.7;font-size:13px;max-width:450px}
+.auth-points{display:grid;gap:12px;margin-top:28px}.auth-point{display:flex;gap:12px;align-items:flex-start;padding:13px;border:1px solid #493a22;border-radius:12px;background:#241d13}.auth-point b{display:block;font-size:12px;color:#f3e6cc}.auth-point span{font-size:10px;color:#9f927b}
+.auth-form{padding:38px;background:#241d13}.auth-form h2{font-size:25px}.auth-form .muted{font-size:11px;color:#a99b82;margin:7px 0 22px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:10px;color:#bdb097;font-weight:700}.field input,.field select{width:100%;padding:12px;border:1px solid #514126;background:#17130d;color:#f7f0df;border-radius:10px;outline:none}.field input:focus,.field select:focus{border-color:#c09135}.auth-btn{width:100%;margin-top:18px;border:0;padding:13px;border-radius:11px;background:linear-gradient(135deg,#9a6b1e,#d6a84f);color:#1b140b;font-weight:800}.auth-note{font-size:9px;color:#8f836e;text-align:center;margin-top:10px}.profile-chip{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid #514126;border-radius:12px;background:#2a2115}.profile-chip strong{font-size:11px}.profile-chip span{display:block;color:#9f927b;font-size:9px;margin-top:2px}.logout-btn{margin-top:16px;width:100%;padding:10px;border:1px solid #5a4526;background:#2b2317;color:#d8c9ae;border-radius:10px;font-size:10px}
+/* prettier attendance */
+.attendance-overview{display:grid;grid-template-columns:1.2fr .8fr;gap:16px;margin-bottom:16px}.attendance-hero{padding:22px;border-radius:18px;background:linear-gradient(145deg,#2e2416,#241b10);border:1px solid #5a4526}.attendance-hero .big{font-size:42px;font-weight:800;color:#f0cf7a}.attendance-hero p{color:#a99b82;font-size:10px;line-height:1.5}.attendance-rule{padding:22px;border-radius:18px;background:#2a2115;border:1px solid #493a22;display:flex;flex-direction:column;justify-content:center}.attendance-rule .rule-number{font-size:30px;font-weight:800;color:#e5bf68}.attendance-rule span{font-size:10px;color:#a99b82}.attendance-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.attendance-card{padding:18px;border-radius:16px;background:#282014;border:1px solid #493a22;transition:.2s}.attendance-card:hover{transform:translateY(-2px);border-color:#80602b}.att-card-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.att-code{font-size:9px;color:#d6a84f;letter-spacing:1px;font-weight:800}.att-name{font-size:12px;font-weight:700;margin-top:4px}.att-percent{font-size:22px;font-weight:800;color:#f0cf7a}.att-track{height:9px;background:#3b3020;border-radius:99px;overflow:hidden;margin:15px 0 10px}.att-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#a97824,#e0b75a)}.att-meta{display:flex;justify-content:space-between;font-size:9px;color:#a99b82}.att-status{margin-top:12px;padding:9px;border-radius:9px;background:#302617;color:#d9c8a8;font-size:9px}.att-status strong{color:#f0cf7a}.attendance-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+/* dynamic timetable */
+.timetable-toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.timetable-remove{border-color:#68402c!important;color:#e0a06b!important}.week{align-items:stretch}.day{min-height:250px;box-shadow:0 8px 22px rgba(70,48,15,.08);transition:.2s}.day:hover{transform:translateY(-2px);border-color:#76592b;box-shadow:0 12px 28px rgba(70,48,15,.14)}.day-header{letter-spacing:1px;color:#f1d17c;border-bottom:1px solid #4d3b21}.class-item{margin:9px;padding:12px 11px;border-left-width:4px;box-shadow:0 4px 12px rgba(0,0,0,.1)}.class-item h4{color:#f7ecd7;font-size:10px}.class-item p{color:#b9aa8e;line-height:1.55}.empty-day{padding:25px 10px;color:#887b64;text-align:center;font-size:10px}.data-note{font-size:9px;color:#8f836e;margin-top:8px}
+@media(max-width:780px){.auth-shell{grid-template-columns:1fr}.auth-visual{display:none}.form-grid{grid-template-columns:1fr}.attendance-overview,.attendance-grid{grid-template-columns:1fr}}
 
-#timetable .card{padding:22px;}
-
-.timetable-actions{
-    display:flex;
-    gap:8px;
-    flex-wrap:wrap;
-}
-
-.link-btn{
-    background:none;
-    border:none;
-    padding:0;
-    color:#e2bf68;
-    text-decoration:underline;
-    font-size:inherit;
-    font-family:inherit;
-    cursor:pointer;
-}
-.link-btn:hover{color:#f1cd73;}
-
-.timetable-legend{
-    display:flex;
-    flex-wrap:wrap;
-    gap:8px 18px;
-    margin:16px 0 18px;
-    padding:12px 14px;
-    background:#20180f;
-    border:1px solid #493a22;
-    border-radius:10px;
-}
-.legend-item{
-    display:flex;
-    align-items:center;
-    gap:7px;
-    font-size:10px;
-    color:#cdbd9e;
-}
-.legend-dot{
-    width:9px;
-    height:9px;
-    border-radius:50%;
-    flex-shrink:0;
-}
-
-.week{
-    display:grid;
-    grid-template-columns:repeat(6,1fr);
-    gap:10px;
-}
-
-.day{
-    background:#1c1610;
-    border:1px solid #40331e;
-    border-radius:14px;
-    overflow:hidden;
-    display:flex;
-    flex-direction:column;
-    transition:.2s;
-}
-.day:hover{
-    border-color:#6b5127;
-    transform:translateY(-2px);
-}
-.day.today{
-    border-color:#d6a84f;
-    box-shadow:0 0 0 1px #d6a84f;
-}
-
-.day-header{
-    text-align:center;
-    padding:12px 5px;
-    background:#2a2114;
-    font-size:11px;
-    font-weight:700;
-    letter-spacing:1px;
-    color:#cdbd9e;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:6px;
-}
-.day.today .day-header{
-    background:linear-gradient(90deg,#4a3618,#352817);
-    color:#f1cd73;
-}
-.today-dot{
-    width:6px;
-    height:6px;
-    border-radius:50%;
-    background:#4ade80;
-    box-shadow:0 0 6px #4ade80;
-}
-
-.class-item{
-    margin:8px;
-    padding:11px 12px;
-    border-radius:10px;
-    background:#271f13;
-    border-left:3px solid var(--accent,#c09135);
-    transition:.2s;
-}
-.class-item:hover{
-    background:#302617;
-    transform:translateX(2px);
-}
-
-.class-item h4{
-    font-size:11px;
-    color:#f3ead4;
-    display:flex;
-    align-items:center;
-    gap:6px;
-}
-.class-item h4::before{
-    content:'';
-    width:7px;
-    height:7px;
-    border-radius:50%;
-    background:var(--accent,#c09135);
-    flex-shrink:0;
-}
-
-.class-item p{
-    color:#a99b82;
-    font-size:9.5px;
-    margin-top:5px;
-    line-height:1.5;
-}
-
-.rescheduled{
-    border-left-color:var(--accent,#e2ad46);
-    background:#33240f;
-}
-.rescheduled h4{color:#f1c464;}
-
-.empty-slot{
-    text-align:center;
-    color:#75694f;
-    font-size:10px;
-    padding:26px 8px;
-    background:transparent;
-    border-left:none;
-}
-
-@media (max-width:900px){
-    .week{grid-template-columns:repeat(3,1fr);}
-}
-@media (max-width:600px){
-    .week{grid-template-columns:repeat(2,1fr);}
-}
-
+.live-update-card{border-color:#80602b!important;background:linear-gradient(145deg,#2b2115,#241b10)!important}.live-update-card .summary-box{border-color:#6a5129}.live-update-card #liveUpdateTitle{color:#f0cf7a}.live-update-card #liveUpdateBody{line-height:1.7}
 </style>
 </head>
 
 <body>
 
-<div class="app">
+
+<div id="authScreen">
+  <div class="auth-shell">
+    <div class="auth-visual">
+      <span class="auth-mark">CAMPUS AI • DEMO</span>
+      <h1>Less scrolling.<br><span>More action.</span></h1>
+      <p>A student information assistant that turns scattered campus announcements into clear, relevant and actionable information.</p>
+      <div class="auth-points">
+        <div class="auth-point"><div>◈</div><div><b>Understand announcements</b><span>Extract deadlines, actions, schedule changes and missing details.</span></div></div>
+        <div class="auth-point"><div>▦</div><div><b>Keep your week organized</b><span>Update your timetable and flag possible clashes.</span></div></div>
+        <div class="auth-point"><div>✓</div><div><b>Track attendance</b><span>See your percentage and how many classes you can still miss.</span></div></div>
+      </div>
+    </div>
+    <div class="auth-form">
+      <h2>Create your student profile</h2>
+      <p class="muted">Demo mode • information is stored only in this browser.</p>
+      <form id="profileForm" onsubmit="return saveProfile(event)">
+        <div class="form-grid">
+          <div class="field"><label>NAME</label><input id="profileName" required placeholder="Student"></div>
+          <div class="field"><label>EMAIL</label><input id="profileEmail" type="email" required placeholder="student@example.com"></div>
+          <div class="field"><label>PASSWORD</label><input id="profilePassword" type="password" required placeholder="••••••••"></div>
+          <div class="field"><label>CONFIRM PASSWORD</label><input id="profileConfirm" type="password" required placeholder="••••••••"></div>
+          <div class="field"><label>BRANCH</label><select id="profileBranch"><option>CSE-AI</option><option>CSE</option><option>ECE</option><option>EEE</option><option>IT</option><option>Other</option></select></div>
+          <div class="field"><label>YEAR</label><select id="profileYear"><option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option>4th Year</option></select></div>
+          <div class="field full"><label>SEMESTER</label><select id="profileSemester"><option>1st Semester</option><option>2nd Semester</option><option>3rd Semester</option><option>4th Semester</option><option>5th Semester</option><option>6th Semester</option><option>7th Semester</option><option>8th Semester</option></select></div>
+        </div>
+        <button class="auth-btn" type="submit">Enter Campus AI →</button>
+        <div class="auth-note">Demo login: any valid email/password is accepted.</div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="app" id="appRoot" style="display:none;">
 
 <!-- ================= SIDEBAR ================= -->
 
@@ -1200,6 +1092,9 @@ textarea:focus{border-color:#b88932;}
         <h1>Campus AI</h1>
         <p>Student Information Assistant</p>
     </div>
+
+    <div class="profile-chip" id="sidebarProfile"><div class="avatar" id="sidebarAvatar">S</div><div><strong id="sidebarName">Student</strong><span id="sidebarCourse">CSE-AI • 1st Year • 1st Semester</span></div></div>
+    <button class="logout-btn" onclick="logoutDemo()">↪ Log out</button>
 
     <div class="nav-title">MAIN</div>
 
@@ -1312,13 +1207,11 @@ textarea:focus{border-color:#b88932;}
 
         <div>
             <h2>YOUR CAMPUS, SORTED</h2>
-            <p>
-                Good morning, Asmita 👋 Here's what actually matters today.
-            </p>
+            <p id="dashboardGreeting">Good morning 👋 Here's what actually matters today.</p>
         </div>
 
         <div class="profile">
-            <div class="avatar">A</div>
+            <div class="avatar" id="dashboardAvatar">S</div>
         </div>
 
     </div>
@@ -1406,6 +1299,14 @@ textarea:focus{border-color:#b88932;}
 
     </div>
 
+
+    <div class="card live-update-card" id="liveCampusUpdate" style="margin-bottom:16px;display:none;">
+        <div class="card-title"><h3>✦ Live Campus Intelligence</h3><span id="liveUpdateTime">Just now</span></div>
+        <div class="summary-box">
+            <div class="summary-line"><strong id="liveUpdateTitle">New information analyzed</strong></div>
+            <div class="summary-line" id="liveUpdateBody">Your latest announcement will appear here with its detected impact.</div>
+        </div>
+    </div>
 
     <div class="grid grid-2">
 
@@ -1670,16 +1571,7 @@ textarea:focus{border-color:#b88932;}
                 <div class="result-label">Priority</div>
 
                 <div class="result-value">
-                    <span class="tag tag-red" id="resultPriorityTag">HIGH</span>
-                </div>
-            </div>
-
-
-            <div class="result-row">
-                <div class="result-label">Category</div>
-
-                <div class="result-value" id="resultCategory">
-                    Deadline
+                    <span class="tag tag-red">HIGH</span>
                 </div>
             </div>
 
@@ -1687,7 +1579,7 @@ textarea:focus{border-color:#b88932;}
             <div class="result-row">
                 <div class="result-label">Deadline</div>
 
-                <div class="result-value" id="resultDeadline">
+                <div class="result-value">
                     Tomorrow, 11:59 PM
                 </div>
             </div>
@@ -1696,7 +1588,7 @@ textarea:focus{border-color:#b88932;}
             <div class="result-row">
                 <div class="result-label">Action</div>
 
-                <div class="result-value" id="resultAction">
+                <div class="result-value">
                     Submit the required assignment through the specified portal.
                 </div>
             </div>
@@ -1705,7 +1597,7 @@ textarea:focus{border-color:#b88932;}
             <div class="result-row">
                 <div class="result-label">Source</div>
 
-                <div class="result-value" id="resultSource">
+                <div class="result-value">
                     Department announcement
                 </div>
             </div>
@@ -1714,7 +1606,7 @@ textarea:focus{border-color:#b88932;}
             <div class="result-row">
                 <div class="result-label">Why it matters</div>
 
-                <div class="result-value" id="resultWhy">
+                <div class="result-value">
                     The deadline is approaching and submission is required.
                 </div>
             </div>
@@ -1723,7 +1615,7 @@ textarea:focus{border-color:#b88932;}
             <div class="result-row">
                 <div class="result-label">Trust</div>
 
-                <div class="result-value" id="resultTrust">
+                <div class="result-value">
                     Source identified • Verify details before acting
                 </div>
             </div>
@@ -2046,34 +1938,20 @@ textarea:focus{border-color:#b88932;}
             </div>
 
             <div class="timetable-actions">
-                <input
-                    type="file"
-                    id="timetableFile"
-                    accept=".pdf,.png,.jpg,.jpeg,.csv,.xlsx,.xls"
-                    hidden
-                    onchange="updateTimetableFile(this)"
-                >
-                <button class="small-btn" onclick="document.getElementById('timetableFile').click()">
-                    ⬆ Upload / Update Timetable
-                </button>
-                <button class="small-btn" onclick="downloadTimetableTemplate()">
-                    ⬇ CSV Template
-                </button>
-                <button class="small-btn" onclick="resetTimetable()">
-                    ↺ Reset Sample
-                </button>
+                <input type="file" id="timetableFile" accept=".csv,.txt,.json" hidden onchange="updateTimetableFile(this)">
+                <div class="timetable-toolbar">
+                  <button class="small-btn" onclick="document.getElementById('timetableFile').click()">⬆ Upload / Update</button>
+                  <button class="small-btn timetable-remove" onclick="removeUploadedTimetable()">✕ Remove uploaded timetable</button>
+                </div>
             </div>
         </div>
 
         <div class="upload-note" id="timetableUploadNote">
-            Upload a <strong>CSV</strong> or <strong>Excel</strong> file with columns <em>Day, Code, Subject, Start, End</em> (use the CSV Template button for the exact format) and the grid below updates automatically. PDF/image files can be attached but can't be auto-read in this browser-only prototype.
+            Upload CSV, TXT or JSON. After upload, the timetable below is rebuilt from the file. Use Remove to return to the demo timetable.
         </div>
 
-        <div class="timetable-legend" id="timetableLegend"></div>
-
-        <div class="week" id="timetableWeek">
-            <!-- Rendered dynamically by renderTimetable() — see script at bottom of page -->
-        </div>
+        <div class="week" id="timetableGrid"></div>
+        <div class="data-note">Supported browser upload formats: CSV, TXT, JSON. Example columns: Day, Time, Code, Subject.</div>
 
     </div>
 
@@ -2083,91 +1961,19 @@ textarea:focus{border-color:#b88932;}
 <!-- ================= ATTENDANCE ================= -->
 
 <section id="attendance" class="page">
-
-    <div class="topbar">
-        <div>
-            <h2>Attendance</h2>
-            <p>
-                Keep track of your semester attendance and how many classes you can still miss.
-            </p>
-        </div>
-    </div>
-
-    <div class="card">
-
-        <div class="card-title">
-            <h3>CSE-AI • Semester 1</h3>
-            <span>Demo data • 75% requirement</span>
-        </div>
-
-        <div class="attendance-item" data-attended="12" data-total="14">
-            <div class="attendance-top">
-                <span>Basic Electrical Engineering</span>
-                <span class="attendance-percent">86%</span>
-            </div>
-            <div class="progress">
-                <div class="progress-bar attendance-bar"></div>
-            </div>
-            <div class="attendance-detail"></div>
-        </div>
-
-        <div class="attendance-item" data-attended="10" data-total="11">
-            <div class="attendance-top">
-                <span>Probability & Statistics</span>
-                <span class="attendance-percent">91%</span>
-            </div>
-            <div class="progress">
-                <div class="progress-bar attendance-bar"></div>
-            </div>
-            <div class="attendance-detail"></div>
-        </div>
-
-        <div class="attendance-item" data-attended="14" data-total="16">
-            <div class="attendance-top">
-                <span>Environmental Studies</span>
-                <span class="attendance-percent">88%</span>
-            </div>
-            <div class="progress">
-                <div class="progress-bar attendance-bar"></div>
-            </div>
-            <div class="attendance-detail"></div>
-        </div>
-
-        <div class="attendance-item" data-attended="9" data-total="11">
-            <div class="attendance-top">
-                <span>Programming with Python</span>
-                <span class="attendance-percent">82%</span>
-            </div>
-            <div class="progress">
-                <div class="progress-bar attendance-bar"></div>
-            </div>
-            <div class="attendance-detail"></div>
-        </div>
-
-        <div class="attendance-item" data-attended="15" data-total="16">
-            <div class="attendance-top">
-                <span>IT Workshop</span>
-                <span class="attendance-percent">94%</span>
-            </div>
-            <div class="progress">
-                <div class="progress-bar attendance-bar"></div>
-            </div>
-            <div class="attendance-detail"></div>
-        </div>
-
-        <div class="attendance-item" data-attended="8" data-total="9">
-            <div class="attendance-top">
-                <span>Communication Skills</span>
-                <span class="attendance-percent">89%</span>
-            </div>
-            <div class="progress">
-                <div class="progress-bar attendance-bar"></div>
-            </div>
-            <div class="attendance-detail"></div>
-        </div>
-
-    </div>
-
+  <div class="topbar"><div><h2>Attendance</h2><p>Know exactly where you stand before you miss a class.</p></div></div>
+  <div class="attendance-overview">
+    <div class="attendance-hero"><div class="big" id="overallAttendance">88%</div><p>Overall sample attendance across the six CSE-AI Semester 1 subjects.</p><div class="att-track"><div class="att-fill" id="overallFill" style="width:88%"></div></div></div>
+    <div class="attendance-rule"><div class="rule-number">75%</div><span>Minimum attendance target</span><div class="data-note">The calculator uses attended ÷ total classes and tells you how many future classes can be missed without falling below 75%.</div></div>
+  </div>
+  <div class="card"><div class="card-title"><h3>Subject-wise attendance</h3><span>Demo data • editable later</span></div><div class="attendance-grid" id="attendanceGrid">
+    <div class="attendance-card" data-code="BEE" data-attended="12" data-total="14"><div class="att-card-top"><div><div class="att-code">BEE</div><div class="att-name">Basic Electrical Engineering</div></div><div class="att-percent">86%</div></div><div class="att-track"><div class="att-fill"></div></div><div class="att-meta"><span>12 attended / 14 held</span><span>Target ≥ 75%</span></div><div class="att-status"></div></div>
+    <div class="attendance-card" data-code="PS" data-attended="10" data-total="11"><div class="att-card-top"><div><div class="att-code">PS</div><div class="att-name">Probability &amp; Statistics</div></div><div class="att-percent">91%</div></div><div class="att-track"><div class="att-fill"></div></div><div class="att-meta"><span>10 attended / 11 held</span><span>Target ≥ 75%</span></div><div class="att-status"></div></div>
+    <div class="attendance-card" data-code="EVS" data-attended="14" data-total="16"><div class="att-card-top"><div><div class="att-code">EVS</div><div class="att-name">Environmental Studies</div></div><div class="att-percent">88%</div></div><div class="att-track"><div class="att-fill"></div></div><div class="att-meta"><span>14 attended / 16 held</span><span>Target ≥ 75%</span></div><div class="att-status"></div></div>
+    <div class="attendance-card" data-code="PWP" data-attended="9" data-total="11"><div class="att-card-top"><div><div class="att-code">PWP</div><div class="att-name">Programming with Python</div></div><div class="att-percent">82%</div></div><div class="att-track"><div class="att-fill"></div></div><div class="att-meta"><span>9 attended / 11 held</span><span>Target ≥ 75%</span></div><div class="att-status"></div></div>
+    <div class="attendance-card" data-code="ITW" data-attended="15" data-total="16"><div class="att-card-top"><div><div class="att-code">ITW</div><div class="att-name">IT Workshop</div></div><div class="att-percent">94%</div></div><div class="att-track"><div class="att-fill"></div></div><div class="att-meta"><span>15 attended / 16 held</span><span>Target ≥ 75%</span></div><div class="att-status"></div></div>
+    <div class="attendance-card" data-code="CS" data-attended="8" data-total="9"><div class="att-card-top"><div><div class="att-code">CS</div><div class="att-name">Communication Skills</div></div><div class="att-percent">89%</div></div><div class="att-track"><div class="att-fill"></div></div><div class="att-meta"><span>8 attended / 9 held</span><span>Target ≥ 75%</span></div><div class="att-status"></div></div>
+  </div></div>
 </section>
 
 
@@ -2428,7 +2234,7 @@ textarea:focus{border-color:#b88932;}
 
             <div class="message ai">
 
-                Hi Asmita 👋 I'm your Campus AI assistant.
+                Hi there 👋 I'm your Campus AI assistant.
 
                 <br><br>
 
@@ -2478,924 +2284,134 @@ textarea:focus{border-color:#b88932;}
 
 
 <script>
+/* ================= STATE ================= */
+const SUBJECTS={
+  PS:'Probability & Statistics', PWP:'Programming with Python', CS:'Communication Skills',
+  BEE:'Basic Electrical Engineering', EVS:'Environmental Studies', ITW:'IT Workshop'
+};
+const DEFAULT_TIMETABLE=[
+ ['MON','9:00 – 10:00','PS','Probability & Statistics'],['MON','10:00 – 11:00','PWP','Programming with Python'],['MON','2:00 – 3:00','CS','Communication Skills'],
+ ['TUE','9:00 – 10:00','BEE','Basic Electrical Engineering'],['TUE','11:00 – 12:00','EVS','Environmental Studies'],['TUE','2:00 – 4:00','ITW','IT Workshop'],
+ ['WED','9:00 – 10:00','CS','Communication Skills'],['WED','12:00 – 1:00','PWP','Programming with Python'],['WED','2:00 – 3:00','PS','Probability & Statistics'],
+ ['THU','9:00 – 10:00','EVS','Environmental Studies'],['THU','11:00 – 12:00','BEE','Basic Electrical Engineering'],['THU','2:00 – 3:00','PWP','Programming with Python'],
+ ['FRI','9:00 – 11:00','ITW','IT Workshop'],['FRI','1:00 – 3:00','BEE','Basic Electrical Engineering'],['FRI','3:00 – 4:00','PS','Probability & Statistics'],
+ ['SAT','9:00 – 10:00','PWP','Programming with Python'],['SAT','11:00 – 12:00','CS','Communication Skills']
+];
+let currentTimetable=JSON.parse(localStorage.getItem('campusTimetable')||'null')||DEFAULT_TIMETABLE.map(x=>({day:x[0],time:x[1],code:x[2],subject:x[3]}));
+let announcements=[];
+
+function $(id){return document.getElementById(id)}
+function escapeHTML(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
+function showToast(message){const t=$('toast');if(!t)return;t.innerText=message;t.classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>t.classList.remove('show'),2200)}
+
+/* ================= AUTH / PROFILE ================= */
+function saveProfile(e){
+  e.preventDefault();
+  const p={name:$('profileName').value.trim()||'Student',email:$('profileEmail').value.trim(),password:$('profilePassword').value,branch:$('profileBranch').value,year:$('profileYear').value,semester:$('profileSemester').value};
+  if(p.password!==$('profileConfirm').value){showToast('Passwords do not match.');return false;}
+  localStorage.setItem('campusProfile',JSON.stringify(p));
+  applyProfile(p); showToast('Profile created successfully.'); return false;
+}
+function applyProfile(p){
+  $('authScreen').style.display='none'; $('appRoot').style.display='flex';
+  const name=escapeHTML(p.name||'Student'); const initial=(p.name||'Student').trim().charAt(0).toUpperCase()||'S';
+  $('sidebarName').innerText=p.name||'Student'; $('sidebarCourse').innerText=`${p.branch} • ${p.year} • ${p.semester}`;
+  $('sidebarAvatar').innerText=initial; $('dashboardAvatar').innerText=initial;
+  $('dashboardGreeting').innerHTML=`Good morning 👋 Here's what actually matters today.`;
+  const ttTitle=document.querySelector('#timetable .timetable-title h3'); if(ttTitle)ttTitle.innerText=`${p.branch} • ${p.semester}`;
+  const attTitle=document.querySelector('#attendance .card-title h3'); if(attTitle)attTitle.innerText=`${p.branch} • ${p.semester}`;
+  localStorage.setItem('campusProfile',JSON.stringify(p));
+}
+function logoutDemo(){localStorage.removeItem('campusProfile');$('appRoot').style.display='none';$('authScreen').style.display='flex';$('profilePassword').value='';$('profileConfirm').value='';showToast('Logged out of demo.');}
 
 /* ================= NAVIGATION ================= */
+function showPage(id,el){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));const page=$(id);if(page)page.classList.add('active');document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));if(el)el.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function openDashboard(){showPage('dashboard',document.querySelectorAll('.nav-item')[1]);}
+function showFilteredAnnouncements(category){showPage('announcements',document.querySelectorAll('.nav-item')[2]);setTimeout(()=>filterAnnouncements(category,null),80)}
 
-function showPage(pageId, element){
-
-    document.querySelectorAll('.page').forEach(page=>{
-        page.classList.remove('active');
-    });
-
-    document.getElementById(pageId).classList.add('active');
-
-    document.querySelectorAll('.nav-item').forEach(item=>{
-        item.classList.remove('active');
-    });
-
-    if(element){
-        element.classList.add('active');
-    }
-
-    window.scrollTo({
-        top:0,
-        behavior:'smooth'
-    });
+/* ================= ANNOUNCEMENTS ================= */
+function collectExistingAnnouncements(){
+  announcements=[...document.querySelectorAll('#announcementList .announcement')].map((card,i)=>({
+    id:'a'+i,category:card.dataset.category||'all',source:card.querySelector('.source')?.innerText||'CAMPUS',title:card.querySelector('h4')?.innerText||'Announcement',text:card.querySelector('p')?.innerText||''
+  }));
 }
-
-
-function openDashboard(){
-
-    const dashboardNav =
-        document.querySelectorAll('.nav-item')[1];
-
-    showPage('dashboard',dashboardNav);
+function renderAnnouncements(){
+  const list=$('announcementList'); if(!list)return;
+  list.innerHTML=announcements.map(a=>`<div class="announcement" data-category="${escapeHTML(a.category)}" data-id="${escapeHTML(a.id)}"><div class="announcement-header"><span class="source">${escapeHTML(a.source)}</span><span class="tag ${a.category==='deadline'?'tag-red':a.category==='schedule'?'tag-yellow':a.category==='duplicate'?'tag-purple':a.category==='opportunity'?'tag-purple':'tag-green'}">${escapeHTML(a.category.toUpperCase())}</span></div><h4>${escapeHTML(a.title)}</h4><p>${escapeHTML(a.text)}</p><div class="announcement-actions"><button class="small-btn" onclick="saveItem(this)">☆ Save</button><button class="small-btn" onclick="markDone(this)">✓ Mark as Done</button></div></div>`).join('');
+  $('announcementCount').innerText=announcements.length+' updates';
 }
-
-
-/* ================= DASHBOARD STATISTICS ================= */
-
-function showFilteredAnnouncements(category){
-
-    const navItems =
-        document.querySelectorAll('.nav-item');
-
-    showPage('announcements',navItems[2]);
-
-    setTimeout(()=>{
-
-        if(category === 'all'){
-            filterAnnouncements('all',null);
-        }
-        else{
-            filterAnnouncements(category,null);
-        }
-
-    },100);
-}
-
-
-/* ================= ANNOUNCEMENT FILTER ================= */
-
-function filterAnnouncements(category,button){
-
-    const cards =
-        document.querySelectorAll('#announcementList .announcement');
-
-    document.querySelectorAll('.filter').forEach(btn=>{
-        btn.classList.remove('active');
-    });
-
-    if(button){
-        button.classList.add('active');
-    }
-    else{
-
-        document.querySelectorAll('.filter').forEach(btn=>{
-
-            const text =
-                btn.innerText.toLowerCase();
-
-            if(
-                (category === 'all' && text === 'all') ||
-                (category === 'deadline' && text.includes('deadline')) ||
-                (category === 'schedule' && text.includes('schedule')) ||
-                (category === 'duplicate' && text.includes('repeated')) ||
-                (category === 'opportunity' && text.includes('opportunit'))
-            ){
-                btn.classList.add('active');
-            }
-
-        });
-
-    }
-
-    let count = 0;
-
-    cards.forEach(card=>{
-
-        if(
-            category === 'all' ||
-            card.dataset.category === category
-        ){
-
-            card.style.display='block';
-            count++;
-
-        }
-        else{
-
-            card.style.display='none';
-
-        }
-
-    });
-
-    const title =
-        document.getElementById('announcementTitle');
-
-    const counter =
-        document.getElementById('announcementCount');
-
-    if(category === 'all'){
-        title.innerText='Important Announcements';
-    }
-    else if(category === 'deadline'){
-        title.innerText='Upcoming Deadlines';
-    }
-    else if(category === 'schedule'){
-        title.innerText='Schedule Changes';
-    }
-    else if(category === 'duplicate'){
-        title.innerText='Repeated Messages';
-    }
-    else if(category === 'opportunity'){
-        title.innerText='Campus Opportunities';
-    }
-
-    counter.innerText =
-        count + (count === 1 ? ' update' : ' updates');
-
-    window.scrollTo({
-        top:0,
-        behavior:'smooth'
-    });
-}
-
-
-/* ================= ANALYZER ================= */
-/* Lightweight, fully client-side heuristic "AI" analysis of the pasted
-   text — no server/API involved. It reads the announcement and scores
-   keywords/patterns for category, priority, deadline, action, source
-   and trust, so the result actually reacts to what was pasted. */
-
-const ANALYZER_SOURCES = [
-    { keys:['exam cell','examination cell','exam section','controller of examinations'], label:'Examination Cell' },
-    { keys:['tpo','placement cell','placement office','career cell','training and placement'], label:'Training & Placement Office' },
-    { keys:['hod','head of department','department of','dept.'], label:'Department Office' },
-    { keys:['faculty','professor','dr.','prof.'], label:'Faculty' },
-    { keys:['student council','student body','student union'], label:'Student Council' },
-    { keys:['hostel','warden'], label:'Hostel Office' },
-    { keys:['library'], label:'Library' },
-    { keys:['sports','ncc','nss'], label:'Sports / NCC / NSS Cell' },
-    { keys:['admin','administration','registrar'], label:'Administration' }
-];
-
-const ANALYZER_ACTION_VERBS = [
-    'submit','register','pay','attend','bring','complete','fill','upload',
-    'report','join','collect','confirm','apply','download','carry','contact'
-];
-
-function detectCategory(text){
-    const low = text.toLowerCase();
-
-    if(/reschedul|postpon|venue chang|shift(ed)? to|new (timing|time|slot|venue)|cancel(led)?|moved to/.test(low)) return 'schedule';
-    if(/hackathon|internship|workshop|recruit|placement drive|fest|competition|scholarship|volunteer|opportunit/.test(low)) return 'opportunity';
-    if(/again|repeat|already (shared|sent|announced)|duplicate|reminder of (the )?(earlier|previous)/.test(low)) return 'duplicate';
-    if(/deadline|due|last date|submit.*by|pay.*by|before \d/.test(low)) return 'deadline';
-
-    return 'deadline';
-}
-
-function detectPriority(category, text, deadlineIsSoon){
-    const low = text.toLowerCase();
-
-    if(deadlineIsSoon || /urgent|immediately|mandatory|compulsory|failure to|strict(ly)?|last date|final (call|notice)/.test(low)){
-        return 'HIGH';
-    }
-
-    if(/optional|fyi|for your information|no action|informational/.test(low)){
-        return 'LOW';
-    }
-
-    return 'MEDIUM';
-}
-
-function extractDeadline(text){
-    const dayWords = ['today','tomorrow','monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
-    const low = text.toLowerCase();
-    const dayMatch = dayWords.find(d => low.includes(d));
-
-    const timeMatch = text.match(/\b(\d{1,2})(:\d{2})?\s?(am|pm|AM|PM)\b/);
-    const dateMatch =
-        text.match(/\b(\d{1,2})(st|nd|rd|th)?[\s-](jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\b/i) ||
-        text.match(/\b(\d{1,2})[\/-](\d{1,2})[\/-]?(\d{2,4})?\b/);
-
-    const parts = [];
-
-    if(dateMatch){
-        parts.push(dateMatch[0]);
-    }else if(dayMatch){
-        parts.push(dayMatch.charAt(0).toUpperCase() + dayMatch.slice(1));
-    }
-
-    if(timeMatch){
-        parts.push(timeMatch[0].toUpperCase());
-    }
-
-    if(parts.length === 0) return null;
-
-    return { text: parts.join(', '), isSoon: /today|tomorrow/.test(low) };
-}
-
-function extractAction(text){
-    const sentences = text.split(/(?<=[.!?])\s+/).filter(s => s.trim() !== '');
-
-    for(const s of sentences){
-        const low = s.toLowerCase();
-
-        if(ANALYZER_ACTION_VERBS.some(v => low.includes(v))){
-            return s.trim();
-        }
-    }
-
-    return sentences[0] ? sentences[0].trim() : 'No specific action detected — read the full announcement for details.';
-}
-
-function extractSource(text){
-    const low = text.toLowerCase();
-
-    for(const src of ANALYZER_SOURCES){
-        if(src.keys.some(k => low.includes(k))){
-            return { label: src.label, confident: true };
-        }
-    }
-
-    return { label: 'Campus Announcement', confident: false };
-}
-
-function categoryLabel(cat){
-    switch(cat){
-        case 'schedule': return 'Schedule Change';
-        case 'opportunity': return 'Opportunity';
-        case 'duplicate': return 'Repeated Message';
-        default: return 'Deadline';
-    }
-}
-
-function whyItMatters(cat, priority, deadline){
-    if(cat === 'schedule'){
-        return 'A timing or venue change was mentioned — check it against your timetable to avoid a clash.';
-    }
-
-    if(cat === 'opportunity'){
-        return 'This looks like an opportunity (event, internship or recruitment) that may need early action to register or apply.';
-    }
-
-    if(cat === 'duplicate'){
-        return 'This message looks similar to something already announced — likely a reminder rather than new information.';
-    }
-
-    if(deadline){
-        return 'A deadline was detected (' + deadline.text + '). ' +
-            (deadline.isSoon ? 'It is coming up soon, so act quickly.' : 'Plan ahead so you do not miss it.');
-    }
-
-    return 'No clear deadline was detected, but the announcement may still need a response — review it fully.';
-}
-
+function filterAnnouncements(category,button){document.querySelectorAll('#announcements .filter').forEach(b=>b.classList.remove('active'));if(button)button.classList.add('active');else document.querySelectorAll('#announcements .filter').forEach(b=>{const t=b.innerText.toLowerCase();if((category==='all'&&t==='all')||(category==='deadline'&&t.includes('deadline'))||(category==='schedule'&&t.includes('schedule'))||(category==='duplicate'&&t.includes('repeated'))||(category==='opportunity'&&t.includes('opportunit')))b.classList.add('active')});let n=0;document.querySelectorAll('#announcementList .announcement').forEach(c=>{const show=category==='all'||c.dataset.category===category;c.style.display=show?'block':'none';if(show)n++});const titles={all:'Important Announcements',deadline:'Upcoming Deadlines',schedule:'Schedule Changes',duplicate:'Repeated Messages',opportunity:'Campus Opportunities'};$('announcementTitle').innerText=titles[category]||titles.all;$('announcementCount').innerText=n+(n===1?' update':' updates');}
+function saveItem(btn){const saved=btn.innerText.includes('Saved');btn.innerText=saved?'☆ Save':'★ Saved';btn.classList.toggle('done',!saved);showToast(saved?'Removed from saved items.':'Announcement saved.');}
+function markDone(btn){btn.innerText='✓ Completed';btn.classList.add('done');showToast('Marked as completed.');}
+
+function detectSubject(text){const t=text.toLowerCase();for(const [code,name] of Object.entries(SUBJECTS)){if(t.includes(code.toLowerCase())||t.includes(name.toLowerCase()))return {code,name}}return null}
+function extractDeadline(text){const t=text.replace(/\s+/g,' ');const patterns=[/(?:deadline|due|last date|submit(?:ted)? by|register by|apply by)[^.!?\n]{0,80}/i,/(?:today|tomorrow|tonight|this evening|monday|tuesday|wednesday|thursday|friday|saturday|sunday)[^.!?\n]{0,55}/i];for(const r of patterns){const m=t.match(r);if(m)return m[0].trim().replace(/[,.]$/,'')}return 'No clear deadline found';}
 function analyzeAnnouncement(){
-
-    const input =
-        document.getElementById('announcementInput');
-
-    const result =
-        document.getElementById('analysisResult');
-
-    const text = input.value.trim();
-
-    if(text===''){
-
-        showToast('Paste an announcement first.');
-
-        input.focus();
-
-        return;
-    }
-
-    const category = detectCategory(text);
-    const deadline = extractDeadline(text);
-    const priority = detectPriority(category, text, !!(deadline && deadline.isSoon));
-    const action = extractAction(text);
-    const source = extractSource(text);
-
-    document.getElementById('resultCategory').innerText = categoryLabel(category);
-
-    const priorityTag = document.getElementById('resultPriorityTag');
-    priorityTag.innerText = priority;
-    priorityTag.className = 'tag ' + (priority === 'HIGH' ? 'tag-red' : priority === 'MEDIUM' ? 'tag-yellow' : 'tag-green');
-
-    document.getElementById('resultDeadline').innerText = deadline ? deadline.text : 'No specific deadline mentioned';
-    document.getElementById('resultAction').innerText = action;
-    document.getElementById('resultSource').innerText = source.label;
-    document.getElementById('resultWhy').innerText = whyItMatters(category, priority, deadline);
-    document.getElementById('resultTrust').innerText = source.confident
-        ? 'Source identified • Verify details before acting'
-        : 'Source unclear • Cross-check before acting';
-
-    result.style.display='block';
-
-    showToast('Announcement analyzed.');
-
-    result.scrollIntoView({behavior:'smooth', block:'nearest'});
-
+  const raw=$('announcementInput').value.trim(); if(!raw){showToast('Paste an announcement first.');$('announcementInput').focus();return}
+  const t=raw.toLowerCase(), subject=detectSubject(raw), deadline=extractDeadline(raw);
+  const normalizedNew=t.replace(/[^a-z0-9\s]/g,' ').replace(/\s+/g,' ').trim();
+  const duplicateMatch=announcements.some(a=>{const existing=(a.title+' '+a.text).toLowerCase().replace(/[^a-z0-9\s]/g,' ').replace(/\s+/g,' ').trim();const nw=new Set(normalizedNew.split(' ').filter(w=>w.length>3));const ew=new Set(existing.split(' ').filter(w=>w.length>3));if(!nw.size||!ew.size)return false;let overlap=0;nw.forEach(w=>{if(ew.has(w))overlap++});return overlap/Math.min(nw.size,ew.size)>.62});
+  const urgent=/(urgent|immediately|today|tomorrow|tonight|deadline|due|submit|submission|exam|practical|cancelled|canceled|rescheduled|shifted|last date)/i.test(raw);
+  const opportunity=/(workshop|orientation|registration|recruitment|hackathon|internship|society|club|competition|event|meeting)/i.test(raw);
+  const schedule=/(cancelled|canceled|rescheduled|reschedule|shifted|postponed|room changed|venue changed|slot changed|time changed)/i.test(raw);
+  const duplicate=duplicateMatch||/(again|reminder|repeated|previous message|already shared|earlier|once again|follow-up)/i.test(raw);
+  const limited=/(limited seats|limited slots|first come|first-come|few seats|capacity)/i.test(raw);
+  const source=/\b(faculty|professor|department|dean|admin|official|college|university|society|minerva)\b/i.test(raw)?'Official/department or society source mentioned':'Source not clearly identified';
+  let priority=urgent?'HIGH':opportunity?'MEDIUM':'LOW';
+  let action=schedule?'Check the updated time, venue and your timetable before attending.':/submit|assignment|submission|upload/i.test(raw)?'Complete the required submission and verify it was accepted.':/register|apply|recruit|join/i.test(raw)?'Review the requirements and register/apply before the stated deadline.':/cancel|cancelled|canceled/i.test(raw)?'Do not follow the cancelled plan; check for the replacement information.':/attend|event|workshop|orientation|meeting/i.test(raw)?'Add the event to your plan and verify the location/time.':'Read the full announcement and identify the required next step.';
+  const why=subject?`This relates to ${subject.code} — ${subject.name}. ${urgent?'It may affect a near-term task or schedule.':'It may be relevant to your academic or campus plans.'}`:'The text contains campus information that may affect your plans.';
+  const flags=[schedule?'Schedule change detected':'',duplicate?'Possible repeat/reminder':'',limited?'Limited availability mentioned':'',!source.startsWith('Official')?'Source needs verification':'',deadline==='No clear deadline found'&&urgent?'Urgency detected but deadline is unclear':''].filter(Boolean);
+  $('analysisResult').innerHTML=`<div class="result-row"><div class="result-label">Priority</div><div class="result-value"><span class="tag ${priority==='HIGH'?'tag-red':priority==='MEDIUM'?'tag-yellow':'tag-green'}">${priority}</span></div></div><div class="result-row"><div class="result-label">Subject</div><div class="result-value">${subject?escapeHTML(subject.code+' • '+subject.name):'Not confidently identified'}</div></div><div class="result-row"><div class="result-label">Deadline</div><div class="result-value">${escapeHTML(deadline)}</div></div><div class="result-row"><div class="result-label">Action</div><div class="result-value">${escapeHTML(action)}</div></div><div class="result-row"><div class="result-label">Source</div><div class="result-value">${escapeHTML(source)}</div></div><div class="result-row"><div class="result-label">Why it matters</div><div class="result-value">${escapeHTML(why)}</div></div><div class="result-row"><div class="result-label">Trust / flags</div><div class="result-value">${flags.length?flags.map(escapeHTML).join(' • '):'No obvious ambiguity detected • Still verify important details'}</div></div>`;
+  $('analysisResult').style.display='block';
+  // Feed the analyzed item into the rest of the dashboard
+  const cat=schedule?'schedule':duplicate?'duplicate':opportunity?'opportunity':urgent?'deadline':'all';
+  const title=subject?`${subject.code} announcement`:(schedule?'Schedule update':duplicate?'Repeated campus update':opportunity?'Campus opportunity':'New campus update');
+  announcements.unshift({id:'new'+Date.now(),category:cat,source:source,title,text:raw});renderAnnouncements();updateDashboardFromAnnouncements();
+  if(subject&&schedule) detectTimetableImpact(subject.code,raw);
+  const live=$('liveCampusUpdate');
+  if(live){live.style.display='block';$('liveUpdateTitle').innerText=`${priority} priority • ${subject?subject.code+' detected':'Campus update detected'}`;$('liveUpdateBody').innerText=`${action} ${deadline!=='No clear deadline found'?'Detected timing: '+deadline+'. ':''}${schedule?'The timetable was checked for a schedule impact. ':''}${duplicate?'This may repeat information already in your feed. ':''}${limited?'Limited availability was detected. ':''}Important details should still be verified against the original source.`;$('liveUpdateTime').innerText='Updated just now';}
+  showToast('Announcement analyzed and campus information updated.');
+}
+function updateDashboardFromAnnouncements(){
+  const all=announcements.length, deadlines=announcements.filter(a=>a.category==='deadline').length, schedules=announcements.filter(a=>a.category==='schedule').length, opp=announcements.filter(a=>a.category==='opportunity').length;
+  const stats=document.querySelectorAll('#dashboard .stat-number');if(stats.length>=4){stats[0].innerText=all;stats[1].innerText=Math.max(0,Math.round(all*.25));stats[2].innerText=deadlines;stats[3].innerText=schedules}
+}
+function detectTimetableImpact(code,text){
+  const day=text.match(/\b(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\b/i)?.[1]?.slice(0,3).toUpperCase();
+  const time=text.match(/\b\d{1,2}(?::\d{2})?\s*(?:AM|PM)?\s*(?:-|to)\s*\d{1,2}(?::\d{2})?\s*(?:AM|PM)?\b/i)?.[0];
+  if(day&&time){currentTimetable=currentTimetable.map(r=>r.code===code?({...r,day,time,rescheduled:true}):r);saveTimetable();renderTimetable();showToast('Timetable updated from the schedule change.');}
 }
 
-
-/* ================= SAVE ================= */
-
-function saveItem(button){
-
-    if(button.innerText.includes('Saved')){
-
-        button.innerText='☆ Save';
-        button.classList.remove('done');
-
-        showToast('Removed from saved items.');
-
-    }
-    else{
-
-        button.innerText='★ Saved';
-        button.classList.add('done');
-
-        showToast('Announcement saved.');
-
-    }
-
+/* ================= TIMETABLE ================= */
+function parseCSVLine(line){const out=[];let cur='',q=false;for(let i=0;i<line.length;i++){const c=line[i];if(c==='"'){if(q&&line[i+1]==='"'){cur+='"';i++}else q=!q}else if(c===','&&!q){out.push(cur.trim());cur=''}else cur+=c}out.push(cur.trim());return out}
+function normalizeDay(d){const x=String(d||'').trim().toUpperCase();const map={MONDAY:'MON',TUESDAY:'TUE',WEDNESDAY:'WED',THURSDAY:'THU',FRIDAY:'FRI',SATURDAY:'SAT',SUNDAY:'SUN'};return map[x]||x.slice(0,3)}
+function parseTimetableText(text,name){
+  const trimmed=text.trim(); if(!trimmed)throw new Error('The file is empty.');
+  if(name.toLowerCase().endsWith('.json')){
+    const j=JSON.parse(trimmed);const arr=Array.isArray(j)?j:(j.timetable||j.classes||j.schedule);if(!Array.isArray(arr))throw new Error('JSON must contain an array of classes.');
+    const rows=arr.map(x=>({day:normalizeDay(x.day),time:String(x.time||x.slot||''),code:String(x.code||x.subjectCode||'').toUpperCase(),subject:String(x.subject||SUBJECTS[String(x.code||'').toUpperCase()]||'')})).filter(x=>x.day&&x.time&&x.code);if(!rows.length)throw new Error('No valid timetable rows found.');return rows;
+  }
+  const lines=trimmed.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);let header=parseCSVLine(lines[0]).map(x=>x.toLowerCase());const hasHeader=header.some(x=>/day|time|subject|code/.test(x));if(hasHeader)lines.shift();
+  const rows=lines.map(line=>{const c=parseCSVLine(line);let day=c[0],time=c[1],code=c[2]||'',subject=c[3]||'';if(!hasHeader&&c.length===3){subject=c[2];code=Object.keys(SUBJECTS).find(k=>c[2].toLowerCase().includes(k.toLowerCase()))||c[2].split(/\s+/)[0]}return {day:normalizeDay(day),time:String(time||''),code:String(code||'').toUpperCase(),subject:subject||SUBJECTS[String(code||'').toUpperCase()]||code}}).filter(x=>x.day&&x.time&&x.code);
+  if(!rows.length)throw new Error('No valid rows found. Use Day, Time, Code, Subject.');return rows;
 }
+function saveTimetable(){localStorage.setItem('campusTimetable',JSON.stringify(currentTimetable))}
+function renderTimetable(){const grid=$('timetableGrid');if(!grid)return;const days=['MON','TUE','WED','THU','FRI','SAT'];grid.innerHTML=days.map(d=>{const rows=currentTimetable.filter(r=>r.day===d);return `<div class="day"><div class="day-header">${d}</div>${rows.length?rows.map(r=>`<div class="class-item ${r.rescheduled?'rescheduled':''}"><h4>${escapeHTML(r.code)}</h4><p>${escapeHTML(r.subject||SUBJECTS[r.code]||r.code)}<br>${escapeHTML(r.time)}${r.rescheduled?'<br><span style="color:#e2ad46">↻ Updated</span>':''}</p></div>`).join(''):'<div class="empty-day">No class scheduled</div>'}</div>`}).join('')}
+function updateTimetableFile(input){const file=input.files?.[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const rows=parseTimetableText(reader.result,file.name);currentTimetable=rows;saveTimetable();renderTimetable();$('timetableStatus').innerText='Uploaded • '+file.name;$('timetableUploadNote').innerText='✓ Timetable updated from '+file.name+'. Your new schedule is now shown below.';$('timetableUploadNote').style.display='block';showToast('Timetable updated successfully.');}catch(err){showToast(err.message||'Could not read timetable.');input.value='';}};reader.onerror=()=>showToast('Could not read that file.');reader.readAsText(file)}
+function removeUploadedTimetable(){currentTimetable=DEFAULT_TIMETABLE.map(x=>({day:x[0],time:x[1],code:x[2],subject:x[3]}));localStorage.removeItem('campusTimetable');renderTimetable();$('timetableStatus').innerText='Sample timetable';$('timetableUploadNote').innerText='Uploaded timetable removed. The demo timetable has been restored.';$('timetableUploadNote').style.display='block';$('timetableFile').value='';showToast('Uploaded timetable removed.');}
 
-
-/* ================= MARK DONE ================= */
-
-function markDone(button){
-
-    button.innerText='✓ Completed';
-    button.classList.add('done');
-
-    showToast('Marked as completed.');
-
-}
-
+/* ================= ATTENDANCE ================= */
+function calculateAttendance(){let totalAtt=0,totalHeld=0;document.querySelectorAll('.attendance-card').forEach(card=>{const a=Number(card.dataset.attended),t=Number(card.dataset.total),pct=t?100*a/t:0;totalAtt+=a;totalHeld+=t;card.querySelector('.att-percent').innerText=Math.round(pct)+'%';card.querySelector('.att-fill').style.width=Math.min(100,pct)+'%';const status=card.querySelector('.att-status');if(pct>=75){const miss=Math.floor(a/.75-t+1e-9);status.innerHTML=miss>0?`<strong>${miss} ${miss===1?'class':'classes'} can still be missed</strong> while staying at or above 75%.`:'<strong>0 classes can be missed</strong> without falling below 75%.';}else{const need=Math.ceil((.75*t-a)/.25);status.innerHTML=`<strong>Attend the next ${need} ${need===1?'class':'classes'}</strong> to reach 75%.`;}});const overall=totalHeld?100*totalAtt/totalHeld:0;$('overallAttendance').innerText=Math.round(overall)+'%';$('overallFill').style.width=Math.min(100,overall)+'%';}
 
 /* ================= OPPORTUNITIES ================= */
-
-function filterOpp(type,button){
-
-    document.querySelectorAll('.filter').forEach(btn=>{
-        btn.classList.remove('active');
-    });
-
-    button.classList.add('active');
-
-    document.querySelectorAll('.opportunity').forEach(card=>{
-
-        if(type==='all'){
-
-            card.style.display='block';
-
-        }
-        else{
-
-            if(card.dataset.type===type){
-                card.style.display='block';
-            }
-            else{
-                card.style.display='none';
-            }
-
-        }
-
-    });
-
-}
-
-
-/* ================= SAVE OPPORTUNITY ================= */
-
-function saveOpportunity(button){
-
-    if(button.innerText.includes('Saved')){
-
-        button.innerText='☆ Save Opportunity';
-        button.classList.remove('done');
-
-        showToast('Opportunity removed.');
-
-    }
-    else{
-
-        button.innerText='★ Saved';
-        button.classList.add('done');
-
-        showToast('Opportunity saved.');
-
-    }
-
-}
-
+function filterOpp(type,button){document.querySelectorAll('#opportunities .filter').forEach(b=>b.classList.remove('active'));button.classList.add('active');document.querySelectorAll('.opportunity').forEach(c=>c.style.display=type==='all'||c.dataset.type===type?'block':'none')}
+function saveOpportunity(button){const saved=button.innerText.includes('Saved');button.innerText=saved?'☆ Save Opportunity':'★ Saved';button.classList.toggle('done',!saved);showToast(saved?'Opportunity removed.':'Opportunity saved.')}
 
 /* ================= CHAT ================= */
+function sendMessage(){const input=$('chatInput'),messages=$('chatMessages'),text=input.value.trim();if(!text)return;const u=document.createElement('div');u.className='message user';u.innerText=text;messages.appendChild(u);input.value='';const l=text.toLowerCase();let reply='I can analyze announcements, update the timetable, explain attendance, find deadlines and show opportunities.';if(l.includes('deadline')||l.includes('due'))reply='Your Announcements page contains the currently detected deadlines. Try analyzing a new announcement and I will add its deadline/action to the campus information feed.';else if(l.includes('timetable')||l.includes('schedule'))reply='Your Smart Timetable uses the current saved timetable. Upload a CSV/TXT/JSON timetable to replace it, or use Remove uploaded timetable to restore the demo schedule.';else if(l.includes('attendance')||l.includes('miss'))reply='The Attendance page calculates the maximum number of future classes you can miss while keeping each subject at or above 75%.';else if(l.includes('conflict')||l.includes('clash'))reply='Schedule changes are checked against the timetable when the announcement contains a recognizable day and time. The system flags possible clashes instead of deciding for you.';else if(l.includes('cs')||l.includes('communication'))reply='CS means Communication Skills in this CSE-AI Semester 1 prototype.';else if(l.includes('pwp'))reply='PWP means Programming with Python.';setTimeout(()=>{const a=document.createElement('div');a.className='message ai';a.innerText=reply;messages.appendChild(a);messages.scrollTop=messages.scrollHeight},250)}
 
-function sendMessage(){
-
-    const input =
-        document.getElementById('chatInput');
-
-    const messages =
-        document.getElementById('chatMessages');
-
-    const text =
-        input.value.trim();
-
-    if(text==='') return;
-
-
-    const userMessage =
-        document.createElement('div');
-
-    userMessage.className='message user';
-
-    userMessage.innerText=text;
-
-    messages.appendChild(userMessage);
-
-    input.value='';
-
-
-    setTimeout(()=>{
-
-        const aiMessage =
-            document.createElement('div');
-
-        aiMessage.className='message ai';
-
-        const lower =
-            text.toLowerCase();
-
-
-        if(
-            lower.includes('tomorrow') ||
-            lower.includes('schedule')
-        ){
-
-            aiMessage.innerText =
-            'Based on the sample timetable, tomorrow includes BEE, EVS and IT Workshop. Check the Smart Timetable for the complete schedule.';
-
-        }
-
-        else if(
-            lower.includes('deadline') ||
-            lower.includes('due')
-        ){
-
-            aiMessage.innerText =
-            'The most urgent sample deadline is the Probability & Statistics assignment, shown as due tomorrow at 11:59 PM.';
-
-        }
-
-        else if(
-            lower.includes('conflict') ||
-            lower.includes('clash')
-        ){
-
-            aiMessage.innerText =
-            'A possible conflict was detected between the BEE practical and a society orientation. The system flags the conflict but does not decide which commitment you should choose.';
-
-        }
-
-        else if(
-            lower.includes('opportun')
-        ){
-
-            aiMessage.innerText =
-            'Current opportunities include Minerva recruitment, a campus hackathon, a Python workshop, a research internship and society orientations.';
-
-        }
-
-        else if(
-            lower.includes('cs') ||
-            lower.includes('communication')
-        ){
-
-            aiMessage.innerText =
-            'CS stands for Communication Skills in this CSE-AI Semester 1 prototype.';
-
-        }
-
-        else if(
-            lower.includes('pwp')
-        ){
-
-            aiMessage.innerText =
-            'PWP stands for Programming with Python.';
-
-        }
-
-        else if(
-            lower.includes('bee')
-        ){
-
-            aiMessage.innerText =
-            'BEE stands for Basic Electrical Engineering. A sample schedule change is currently shown for the BEE practical.';
-
-        }
-
-        else{
-
-            aiMessage.innerText =
-            'I can help you understand announcements, deadlines, timetable changes, conflicts, attendance and campus opportunities.';
-
-        }
-
-
-        messages.appendChild(aiMessage);
-
-        messages.scrollTop =
-            messages.scrollHeight;
-
-    },450);
-
-}
-
-
-
-/* ================= SMART TIMETABLE — DATA + RENDERING ================= */
-
-const SUBJECT_NAMES = {
-    PS: 'Probability & Statistics',
-    PWP: 'Programming with Python',
-    CS: 'Communication Skills',
-    BEE: 'Basic Electrical Engineering',
-    EVS: 'Environmental Studies',
-    ITW: 'IT Workshop'
-};
-
-const SUBJECT_COLORS = {
-    PS: '#c09135',
-    PWP: '#4fb8c4',
-    CS: '#e07bb0',
-    BEE: '#e2ad46',
-    EVS: '#7ec97a',
-    ITW: '#e88a4e'
-};
-
-const DAY_LABELS = ['MON','TUE','WED','THU','FRI','SAT'];
-
-let timetableData = [
-    { day:'MON', classes:[
-        {code:'PS', start:'9:00', end:'10:00'},
-        {code:'PWP', start:'10:00', end:'11:00'},
-        {code:'CS', start:'2:00', end:'3:00'}
-    ]},
-    { day:'TUE', classes:[
-        {code:'BEE', start:'9:00', end:'10:00'},
-        {code:'EVS', start:'11:00', end:'12:00'},
-        {code:'ITW', start:'2:00', end:'4:00'}
-    ]},
-    { day:'WED', classes:[
-        {code:'CS', start:'9:00', end:'10:00'},
-        {code:'PWP', start:'12:00', end:'1:00', rescheduled:true},
-        {code:'PS', start:'2:00', end:'3:00'}
-    ]},
-    { day:'THU', classes:[
-        {code:'EVS', start:'9:00', end:'10:00'},
-        {code:'BEE', start:'11:00', end:'12:00'},
-        {code:'PWP', start:'2:00', end:'3:00'}
-    ]},
-    { day:'FRI', classes:[
-        {code:'ITW', start:'9:00', end:'11:00'},
-        {code:'BEE', start:'1:00', end:'3:00', rescheduled:true, label:'Practical'},
-        {code:'PS', start:'3:00', end:'4:00'}
-    ]},
-    { day:'SAT', classes:[
-        {code:'PWP', start:'9:00', end:'10:00'},
-        {code:'CS', start:'11:00', end:'12:00'}
-    ]}
-];
-
-const DEFAULT_TIMETABLE = JSON.parse(JSON.stringify(timetableData));
-
-function colorForCode(code){
-    if(SUBJECT_COLORS[code]) return SUBJECT_COLORS[code];
-
-    let hash = 0;
-    for(let i=0;i<code.length;i++){
-        hash = code.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    const hue = Math.abs(hash) % 360;
-    return 'hsl(' + hue + ', 55%, 58%)';
-}
-
-function nameForCode(code){
-    return SUBJECT_NAMES[code] || code;
-}
-
-function renderTimetableLegend(data){
-    const legend = document.getElementById('timetableLegend');
-    if(!legend) return;
-
-    const seen = {};
-    let html = '';
-
-    data.forEach(day => {
-        day.classes.forEach(cls => {
-            if(seen[cls.code]) return;
-            seen[cls.code] = true;
-
-            html +=
-                '<div class="legend-item">' +
-                    '<span class="legend-dot" style="background:' + colorForCode(cls.code) + ';"></span>' +
-                    cls.code + ' — ' + nameForCode(cls.code) +
-                '</div>';
-        });
-    });
-
-    legend.innerHTML = html;
-}
-
-function renderTimetable(data){
-    const week = document.getElementById('timetableWeek');
-    if(!week) return;
-
-    week.innerHTML = '';
-
-    const jsDay = new Date().getDay(); // 0 = Sun ... 6 = Sat
-    const todayIndex = jsDay === 0 ? -1 : jsDay - 1; // MON=0 ... SAT=5
-
-    data.forEach((day, idx) => {
-        const dayEl = document.createElement('div');
-        dayEl.className = 'day' + (idx === todayIndex ? ' today' : '');
-
-        const header = document.createElement('div');
-        header.className = 'day-header';
-        header.innerHTML = day.day + (idx === todayIndex ? '<span class="today-dot"></span>' : '');
-        dayEl.appendChild(header);
-
-        if(day.classes.length === 0){
-            const empty = document.createElement('div');
-            empty.className = 'class-item empty-slot';
-            empty.innerHTML = '<p>No classes</p>';
-            dayEl.appendChild(empty);
-        }
-
-        day.classes.forEach(cls => {
-            const item = document.createElement('div');
-            item.className = 'class-item' + (cls.rescheduled ? ' rescheduled' : '');
-            item.style.setProperty('--accent', colorForCode(cls.code));
-
-            const title = cls.code + (cls.rescheduled ? ' ⚠' : '');
-            const subLabel = cls.label ? cls.label : nameForCode(cls.code);
-
-            item.innerHTML =
-                '<h4>' + title + '</h4>' +
-                '<p>' + subLabel + '<br>' + cls.start + ' – ' + cls.end + '</p>';
-
-            dayEl.appendChild(item);
-        });
-
-        week.appendChild(dayEl);
-    });
-
-    renderTimetableLegend(data);
-}
-
-function parseCSV(text){
-    const lines = text.split(/\r?\n/).filter(l => l.trim() !== '');
-    if(lines.length < 2) return null;
-
-    const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
-
-    const rows = lines.slice(1).map(line => {
-        const cells = line.split(',').map(c => c.trim());
-        const obj = {};
-        headers.forEach((h, i) => obj[h] = cells[i] || '');
-        return obj;
-    });
-
-    return rowsToTimetable(rows);
-}
-
-function rowsToTimetable(rows){
-    const byDay = {};
-    DAY_LABELS.forEach(d => byDay[d] = []);
-
-    let matched = 0;
-
-    rows.forEach(row => {
-        const dayRaw = String(row.day || '').toUpperCase().slice(0,3);
-        const day = DAY_LABELS.find(d => d === dayRaw);
-        if(!day) return;
-
-        const code = String(row.code || row.subject || '').toUpperCase().trim();
-        if(!code) return;
-
-        const subject = row.subject ? String(row.subject).trim() : '';
-
-        byDay[day].push({
-            code: code,
-            label: (subject && subject.toUpperCase() !== code) ? subject : undefined,
-            start: row.start || '',
-            end: row.end || '',
-            rescheduled: /^y|true/i.test(String(row.rescheduled || ''))
-        });
-
-        matched++;
-    });
-
-    if(matched === 0) return null;
-
-    return DAY_LABELS.map(d => ({ day:d, classes: byDay[d] }));
-}
-
-function downloadTimetableTemplate(){
-    let csv = 'Day,Code,Subject,Start,End,Rescheduled\n';
-
-    timetableData.forEach(day => {
-        day.classes.forEach(c => {
-            csv += [day.day, c.code, c.label || nameForCode(c.code), c.start, c.end, c.rescheduled ? 'yes' : 'no'].join(',') + '\n';
-        });
-    });
-
-    const blob = new Blob([csv], {type:'text/csv'});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'timetable_template.csv';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-
-    showToast('CSV template downloaded.');
-}
-
-function resetTimetable(){
-    timetableData = JSON.parse(JSON.stringify(DEFAULT_TIMETABLE));
-    renderTimetable(timetableData);
-
-    document.getElementById('timetableStatus').innerText = 'Sample timetable';
-
-    const note = document.getElementById('timetableUploadNote');
-    note.style.display = 'none';
-
-    showToast('Timetable reset to sample.');
-}
-
-function updateTimetableFile(input){
-    const note = document.getElementById('timetableUploadNote');
-    const status = document.getElementById('timetableStatus');
-
-    if(!input.files || !input.files[0]) return;
-
-    const file = input.files[0];
-    const fileName = file.name;
-    const ext = fileName.split('.').pop().toLowerCase();
-
-    note.style.display = 'block';
-
-    if(ext === 'csv'){
-
-        const reader = new FileReader();
-
-        reader.onload = function(e){
-            const parsed = parseCSV(e.target.result);
-
-            if(parsed){
-                timetableData = parsed;
-                renderTimetable(timetableData);
-                status.innerText = 'Updated from ' + fileName;
-                note.innerHTML = '✓ Timetable updated from <strong>' + fileName + '</strong>.';
-                showToast('Timetable updated successfully.');
-            }else{
-                note.innerHTML = '⚠ Could not find valid rows in <strong>' + fileName + '</strong>. Expected columns: Day, Code, Subject, Start, End.';
-                showToast('Could not parse that file.');
-            }
-        };
-
-        reader.onerror = function(){
-            note.innerHTML = '⚠ Could not read ' + fileName + '.';
-        };
-
-        reader.readAsText(file);
-
-    }
-    else if(ext === 'xlsx' || ext === 'xls'){
-
-        if(typeof XLSX === 'undefined'){
-            note.innerHTML = '⚠ Excel support failed to load (no internet access?). Try a CSV file instead.';
-            showToast('Could not load Excel support.');
-            return;
-        }
-
-        const reader = new FileReader();
-
-        reader.onload = function(e){
-            try{
-                const wb = XLSX.read(new Uint8Array(e.target.result), {type:'array'});
-                const sheet = wb.Sheets[wb.SheetNames[0]];
-                const rawRows = XLSX.utils.sheet_to_json(sheet, {defval:''});
-
-                const rows = rawRows.map(r => {
-                    const obj = {};
-                    Object.keys(r).forEach(k => obj[k.toLowerCase().trim()] = String(r[k]).trim());
-                    return obj;
-                });
-
-                const parsed = rowsToTimetable(rows);
-
-                if(parsed){
-                    timetableData = parsed;
-                    renderTimetable(timetableData);
-                    status.innerText = 'Updated from ' + fileName;
-                    note.innerHTML = '✓ Timetable updated from <strong>' + fileName + '</strong>.';
-                    showToast('Timetable updated successfully.');
-                }else{
-                    note.innerHTML = '⚠ Could not find valid rows in <strong>' + fileName + '</strong>. Expected columns: Day, Code, Subject, Start, End.';
-                    showToast('Could not parse that file.');
-                }
-            }catch(err){
-                note.innerHTML = '⚠ Could not read ' + fileName + '. Make sure it is a valid Excel file.';
-                showToast('Could not parse that file.');
-            }
-        };
-
-        reader.readAsArrayBuffer(file);
-
-    }
-    else{
-
-        status.innerText = 'File attached (manual review needed)';
-        note.innerHTML =
-            '📎 <strong>' + fileName + '</strong> was attached, but this prototype can\'t automatically read timetable data out of a ' +
-            ext.toUpperCase() + ' file. Upload a <strong>CSV</strong> or <strong>Excel</strong> file with columns ' +
-            '<em>Day, Code, Subject, Start, End</em> to update the grid automatically — or ' +
-            '<button class="link-btn" onclick="downloadTimetableTemplate()">download a template</button>.';
-
-        showToast(ext.toUpperCase() + ' attached — use CSV/Excel for auto-update.');
-    }
-}
-
-renderTimetable(timetableData);
-
-
-/* ================= ATTENDANCE CALCULATOR ================= */
-
-function calculateAttendance(){
-    document.querySelectorAll('.attendance-item').forEach(item => {
-        const attended = Number(item.dataset.attended);
-        const total = Number(item.dataset.total);
-        const percent = total > 0 ? (attended / total) * 100 : 0;
-
-        const percentElement = item.querySelector('.attendance-percent');
-        const bar = item.querySelector('.attendance-bar');
-        const detail = item.querySelector('.attendance-detail');
-
-        percentElement.innerText = Math.round(percent) + '%';
-        bar.style.width = Math.min(percent,100) + '%';
-
-        if(percent >= 75){
-            const maxMisses = Math.floor((attended / 0.75) - total + 1e-9);
-
-            if(maxMisses > 0){
-                detail.innerHTML =
-                    '<strong>Can miss ' + maxMisses +
-                    ' more ' + (maxMisses === 1 ? 'class' : 'classes') +
-                    '</strong> and still stay at or above 75%.';
-            }else{
-                detail.innerHTML =
-                    '<strong>0 classes can be missed</strong> without going below 75%.';
-            }
-        }else{
-            const needed = Math.ceil((0.75 * total - attended) / 0.25);
-            detail.innerHTML =
-                '<strong>Attend the next ' + needed +
-                ' ' + (needed === 1 ? 'class' : 'classes') +
-                '</strong> to reach 75%.';
-        }
-    });
-}
-
-calculateAttendance();
-
-
-/* ================= TOAST ================= */
-
-function showToast(message){
-
-    const toast =
-        document.getElementById('toast');
-
-    toast.innerText=message;
-
-    toast.classList.add('show');
-
-    setTimeout(()=>{
-        toast.classList.remove('show');
-    },2200);
-
-}
-
+/* ================= STARTUP ================= */
+document.addEventListener('DOMContentLoaded',()=>{collectExistingAnnouncements();renderAnnouncements();renderTimetable();calculateAttendance();const p=JSON.parse(localStorage.getItem('campusProfile')||'null');if(p)applyProfile(p);else{$('authScreen').style.display='flex';$('appRoot').style.display='none';}});
 </script>
 
 </body>
