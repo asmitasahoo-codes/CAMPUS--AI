@@ -1,0 +1,3402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Campus AI — Student Information Assistant</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Inter',sans-serif;
+    background:#090914;
+    color:#f5f3ff;
+    min-height:100vh;
+}
+
+button{
+    font-family:inherit;
+    cursor:pointer;
+}
+
+.app{
+    display:flex;
+    min-height:100vh;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+    width:245px;
+    background:#10101d;
+    border-right:1px solid #27243c;
+    padding:25px 15px;
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    z-index:10;
+}
+
+.logo{
+    padding:0 14px 28px;
+}
+
+.logo h1{
+    font-size:20px;
+    font-weight:800;
+    background:linear-gradient(90deg,#a78bfa,#e879f9);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.logo p{
+    color:#85829b;
+    font-size:11px;
+    margin-top:5px;
+}
+
+.nav-title{
+    font-size:10px;
+    color:#66637b;
+    letter-spacing:1.5px;
+    padding:0 14px;
+    margin:15px 0 9px;
+}
+
+.nav-item{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:12px 14px;
+    border-radius:10px;
+    color:#9996ac;
+    font-size:13px;
+    margin-bottom:4px;
+    transition:.2s;
+}
+
+.nav-item:hover{
+    background:#1b192d;
+    color:white;
+}
+
+.nav-item.active{
+    background:linear-gradient(90deg,#241d45,#1c1830);
+    color:#c4b5fd;
+    border:1px solid #30265a;
+}
+
+.nav-icon{
+    width:18px;
+    text-align:center;
+}
+
+/* MAIN */
+
+.main{
+    margin-left:245px;
+    width:calc(100% - 245px);
+    padding:30px 35px;
+}
+
+.page{
+    display:none;
+    animation:fadeIn .25s ease;
+}
+
+.page.active{
+    display:block;
+}
+
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(5px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:28px;
+}
+
+.topbar h2{
+    font-size:25px;
+}
+
+.topbar p{
+    color:#85829b;
+    font-size:13px;
+    margin-top:5px;
+}
+
+.profile{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.avatar{
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#8b5cf6,#ec4899);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-weight:700;
+}
+
+/* HOME */
+
+.hero{
+    min-height:82vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    max-width:900px;
+}
+
+.hero-badge{
+    display:inline-block;
+    width:fit-content;
+    padding:7px 13px;
+    border-radius:30px;
+    background:#17142a;
+    border:1px solid #30265a;
+    color:#b9a7ff;
+    font-size:11px;
+    margin-bottom:22px;
+}
+
+.hero h1{
+    font-size:clamp(42px,6vw,76px);
+    line-height:1.02;
+    letter-spacing:-3px;
+    margin-bottom:20px;
+}
+
+.gradient-text{
+    background:linear-gradient(90deg,#a78bfa,#f0abfc);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.hero p{
+    max-width:650px;
+    color:#9996ac;
+    line-height:1.7;
+    font-size:15px;
+}
+
+.hero-button{
+    width:fit-content;
+    margin-top:30px;
+    background:linear-gradient(135deg,#7c3aed,#a855f7);
+    border:none;
+    color:white;
+    padding:14px 23px;
+    border-radius:10px;
+    font-weight:700;
+    box-shadow:0 10px 35px rgba(124,58,237,.25);
+}
+
+.flow{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+    margin-top:55px;
+}
+
+.flow-card{
+    background:#11101d;
+    border:1px solid #27243c;
+    padding:18px;
+    border-radius:13px;
+}
+
+.flow-card span{
+    font-size:20px;
+}
+
+.flow-card h4{
+    margin-top:13px;
+    font-size:13px;
+}
+
+.flow-card p{
+    margin-top:6px;
+    font-size:11px;
+}
+
+/* CARDS */
+
+.card{
+    background:#11101d;
+    border:1px solid #27243c;
+    border-radius:15px;
+    padding:20px;
+}
+
+.card-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:18px;
+}
+
+.card-title h3{
+    font-size:15px;
+}
+
+.card-title span{
+    color:#817d97;
+    font-size:11px;
+}
+
+.grid{
+    display:grid;
+    gap:16px;
+}
+
+.grid-4{
+    grid-template-columns:repeat(4,1fr);
+}
+
+.grid-3{
+    grid-template-columns:repeat(3,1fr);
+}
+
+.grid-2{
+    grid-template-columns:repeat(2,1fr);
+}
+
+/* CLICKABLE STATS */
+
+.stat{
+    position:relative;
+    overflow:hidden;
+    transition:.2s;
+    cursor:pointer;
+}
+
+.stat:hover{
+    transform:translateY(-3px);
+    border-color:#6245a4;
+    background:#17152a;
+}
+
+.stat-number{
+    font-size:27px;
+    font-weight:800;
+}
+
+.stat-label{
+    color:#838096;
+    font-size:11px;
+    margin-top:5px;
+    max-width:130px;
+}
+
+.stat-icon{
+    position:absolute;
+    right:17px;
+    top:17px;
+    font-size:22px;
+}
+
+.stat-hint{
+    font-size:9px;
+    color:#6f6b81;
+    margin-top:9px;
+}
+
+/* PRIORITIES */
+
+.priority{
+    padding:14px;
+    background:#171526;
+    border:1px solid #292641;
+    border-radius:10px;
+    margin-bottom:9px;
+}
+
+.priority:last-child{
+    margin-bottom:0;
+}
+
+.priority-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+}
+
+.priority h4{
+    font-size:12px;
+}
+
+.priority p{
+    color:#89859b;
+    font-size:11px;
+    margin-top:5px;
+    line-height:1.5;
+}
+
+.tag{
+    font-size:9px;
+    padding:4px 7px;
+    border-radius:5px;
+    font-weight:700;
+    white-space:nowrap;
+}
+
+.tag-red{
+    background:#3a1823;
+    color:#fb7185;
+}
+
+.tag-yellow{
+    background:#352b13;
+    color:#facc15;
+}
+
+.tag-purple{
+    background:#291b43;
+    color:#c4b5fd;
+}
+
+.tag-green{
+    background:#12291f;
+    color:#4ade80;
+}
+
+/* ANNOUNCEMENTS */
+
+.announcement{
+    background:#151422;
+    border:1px solid #28253b;
+    border-radius:13px;
+    padding:17px;
+    margin-bottom:11px;
+    transition:.2s;
+}
+
+.announcement:hover{
+    border-color:#41365d;
+}
+
+.announcement-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.source{
+    color:#a78bfa;
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:.5px;
+}
+
+.announcement h4{
+    margin-top:9px;
+    font-size:13px;
+}
+
+.announcement p{
+    color:#858197;
+    font-size:11px;
+    line-height:1.5;
+    margin-top:6px;
+}
+
+.announcement-actions{
+    display:flex;
+    gap:7px;
+    margin-top:13px;
+    flex-wrap:wrap;
+}
+
+.small-btn{
+    border:1px solid #37334d;
+    background:#1a1829;
+    color:#b4afc5;
+    padding:7px 10px;
+    border-radius:7px;
+    font-size:10px;
+}
+
+.small-btn:hover{
+    background:#25213a;
+    color:white;
+}
+
+.small-btn.done{
+    color:#4ade80;
+    border-color:#245737;
+}
+
+/* FILTER BAR */
+
+.filter-bar{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-bottom:16px;
+}
+
+.filter{
+    padding:8px 13px;
+    border-radius:8px;
+    border:1px solid #302d43;
+    background:#141320;
+    color:#8e899f;
+    font-size:10px;
+}
+
+.filter.active,
+.filter:hover{
+    background:#281e49;
+    border-color:#6345a8;
+    color:#c4b5fd;
+}
+
+/* ANALYZER */
+
+textarea{
+    width:100%;
+    min-height:170px;
+    background:#0d0c17;
+    border:1px solid #302d45;
+    border-radius:11px;
+    padding:15px;
+    color:white;
+    resize:vertical;
+    font-family:inherit;
+    outline:none;
+}
+
+textarea:focus{
+    border-color:#7c3aed;
+}
+
+.analyze-btn{
+    margin-top:12px;
+    background:linear-gradient(135deg,#7c3aed,#a855f7);
+    border:none;
+    color:white;
+    padding:11px 17px;
+    border-radius:8px;
+    font-weight:600;
+}
+
+.analysis-result{
+    margin-top:18px;
+    display:none;
+    background:#171526;
+    border:1px solid #302b4c;
+    padding:18px;
+    border-radius:11px;
+}
+
+.result-row{
+    display:flex;
+    gap:12px;
+    margin-bottom:13px;
+}
+
+.result-label{
+    width:85px;
+    color:#79758b;
+    font-size:10px;
+}
+
+.result-value{
+    font-size:11px;
+    color:#ddd8ec;
+}
+
+/* SMART SUMMARY */
+
+.summary-box{
+    margin-top:16px;
+    background:#151322;
+    border:1px solid #302b4b;
+    border-radius:12px;
+    padding:17px;
+}
+
+.summary-box h4{
+    font-size:12px;
+    color:#c4b5fd;
+    margin-bottom:10px;
+}
+
+.summary-line{
+    display:flex;
+    gap:10px;
+    margin-bottom:9px;
+    font-size:10px;
+    color:#aaa5b9;
+}
+
+.summary-line strong{
+    color:#eeeaf7;
+}
+
+/* TIMETABLE */
+
+.week{
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:8px;
+}
+
+.day{
+    background:#11101d;
+    border:1px solid #27243c;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+.day-header{
+    text-align:center;
+    padding:12px 5px;
+    background:#171526;
+    font-size:11px;
+    font-weight:700;
+}
+
+.class-item{
+    margin:7px;
+    padding:10px;
+    border-radius:8px;
+    background:#1b1830;
+    border-left:3px solid #8b5cf6;
+}
+
+.class-item h4{
+    font-size:10px;
+}
+
+.class-item p{
+    color:#807c91;
+    font-size:9px;
+    margin-top:4px;
+}
+
+.rescheduled{
+    border-left-color:#f59e0b;
+}
+
+/* ATTENDANCE */
+
+.attendance-item{
+    margin-bottom:18px;
+}
+
+.attendance-top{
+    display:flex;
+    justify-content:space-between;
+    font-size:11px;
+    margin-bottom:7px;
+}
+
+.progress{
+    height:7px;
+    background:#252237;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.progress-bar{
+    height:100%;
+    border-radius:20px;
+    background:linear-gradient(90deg,#7c3aed,#c084fc);
+}
+
+/* OPPORTUNITIES */
+
+.opportunity{
+    background:#151422;
+    border:1px solid #28253b;
+    border-radius:13px;
+    padding:17px;
+}
+
+.opp-icon{
+    width:38px;
+    height:38px;
+    border-radius:9px;
+    background:#261c40;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
+}
+
+.opportunity h4{
+    margin-top:12px;
+    font-size:13px;
+}
+
+.opportunity p{
+    color:#817d91;
+    font-size:10px;
+    margin-top:6px;
+    line-height:1.5;
+}
+
+.opp-meta{
+    display:flex;
+    justify-content:space-between;
+    margin-top:14px;
+    color:#918ca1;
+    font-size:9px;
+}
+
+/* CHAT */
+
+.chat-box{
+    max-width:850px;
+}
+
+.chat-messages{
+    min-height:430px;
+    max-height:500px;
+    overflow-y:auto;
+    background:#0e0d18;
+    border:1px solid #27243c;
+    border-radius:14px;
+    padding:18px;
+}
+
+.message{
+    max-width:75%;
+    padding:12px 14px;
+    border-radius:11px;
+    margin-bottom:10px;
+    font-size:11px;
+    line-height:1.6;
+}
+
+.message.ai{
+    background:#1a1729;
+    border:1px solid #292440;
+    color:#d5d0e3;
+}
+
+.message.user{
+    background:#50329a;
+    margin-left:auto;
+    color:white;
+}
+
+.chat-input{
+    display:flex;
+    gap:8px;
+    margin-top:10px;
+}
+
+.chat-input input{
+    flex:1;
+    background:#11101d;
+    border:1px solid #302d45;
+    border-radius:9px;
+    padding:12px;
+    color:white;
+    outline:none;
+}
+
+.chat-input button{
+    border:none;
+    background:#7c3aed;
+    color:white;
+    border-radius:9px;
+    padding:0 20px;
+}
+
+/* CONFLICT */
+
+.conflict{
+    border:1px solid #5b2635;
+    background:#24141c;
+    padding:16px;
+    border-radius:11px;
+}
+
+.conflict h4{
+    color:#fb7185;
+    font-size:12px;
+}
+
+.conflict p{
+    color:#b49ca4;
+    font-size:10px;
+    margin-top:6px;
+    line-height:1.5;
+}
+
+.warning{
+    margin-top:8px;
+    padding:9px;
+    border-radius:7px;
+    background:#302318;
+    color:#fbbf24;
+    font-size:9px;
+}
+
+/* SECTION HEADER */
+
+.section-heading{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+}
+
+.section-heading h3{
+    font-size:15px;
+}
+
+.section-heading span{
+    color:#77738a;
+    font-size:10px;
+}
+
+/* TOAST */
+
+.toast{
+    position:fixed;
+    right:25px;
+    bottom:25px;
+    background:#1c1830;
+    border:1px solid #4b3a75;
+    color:#ddd8ed;
+    padding:12px 16px;
+    border-radius:9px;
+    font-size:11px;
+    opacity:0;
+    transform:translateY(10px);
+    pointer-events:none;
+    transition:.25s;
+    z-index:100;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translateY(0);
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1000px){
+
+    .sidebar{
+        width:200px;
+    }
+
+    .main{
+        margin-left:200px;
+        width:calc(100% - 200px);
+    }
+
+    .grid-4{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .flow{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .week{
+        overflow-x:auto;
+        grid-template-columns:repeat(6,170px);
+    }
+}
+
+@media(max-width:700px){
+
+    .sidebar{
+        display:none;
+    }
+
+    .main{
+        margin-left:0;
+        width:100%;
+        padding:20px;
+    }
+
+    .grid-4,
+    .grid-3,
+    .grid-2{
+        grid-template-columns:1fr;
+    }
+
+    .hero h1{
+        font-size:43px;
+    }
+
+    .flow{
+        grid-template-columns:1fr;
+    }
+}
+
+/* ================= WARM BROWN + GOLD THEME ================= */
+body{
+    background:#17130d;
+    color:#f7f0df;
+}
+.sidebar{
+    background:#211a10;
+    border-right-color:#493a22;
+}
+.logo h1{
+    background:linear-gradient(90deg,#d6a84f,#f0d58a);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+.logo p,.topbar p,.hero p,.card-title span,.section-heading span{
+    color:#a99b82;
+}
+.nav-title{color:#80745e;}
+.nav-item{color:#b5a88f;}
+.nav-item:hover{background:#302618;color:#fff7e5;}
+.nav-item.active{
+    background:linear-gradient(90deg,#4a3618,#352817);
+    color:#f1cd73;
+    border-color:#73572a;
+}
+.avatar{
+    background:linear-gradient(135deg,#a87925,#d6a84f);
+}
+.hero-badge{
+    background:#2a2114;
+    border-color:#6b5127;
+    color:#e2bf68;
+}
+.gradient-text{
+    background:linear-gradient(90deg,#d6a84f,#f3d58a);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+.hero-button,.analyze-btn{
+    background:linear-gradient(135deg,#9a6b1e,#d6a84f);
+    box-shadow:0 10px 35px rgba(154,107,30,.22);
+}
+.flow-card,.card{
+    background:#241d13;
+    border-color:#493a22;
+}
+.stat:hover{
+    border-color:#8a6a30;
+    background:#302617;
+}
+.stat-label,.stat-hint{color:#9d9077;}
+.priority{
+    background:#2a2115;
+    border-color:#4c3b22;
+}
+.tag-yellow{
+    background:#443416;
+    color:#f1c95e;
+}
+.tag-purple{
+    background:#3d2d16;
+    color:#e4bd65;
+}
+.tag-green{
+    background:#20301e;
+    color:#87c477;
+}
+.announcement,.opportunity{
+    background:#282014;
+    border-color:#493a22;
+}
+.announcement:hover{border-color:#76592b;}
+.source{color:#d6a84f;}
+.small-btn,.filter{
+    background:#2b2317;
+    border-color:#514126;
+    color:#bfb298;
+}
+.small-btn:hover{background:#3a2d1b;color:#fff7e5;}
+.small-btn.done{color:#8bc77d;border-color:#36582d;}
+.filter.active,.filter:hover{
+    background:#4a3618;
+    border-color:#80602b;
+    color:#f1cd73;
+}
+textarea,.chat-messages,.chat-input input{
+    background:#17130d;
+    border-color:#4b3b24;
+}
+textarea:focus{border-color:#b88932;}
+.analysis-result,.summary-box{
+    background:#2a2115;
+    border-color:#554126;
+}
+.summary-box h4{color:#e3bd68;}
+.summary-line{color:#b4a78e;}
+.summary-line strong{color:#f1e7d2;}
+.day{
+    background:#241d13;
+    border-color:#493a22;
+}
+.day-header{background:#302517;}
+.class-item{
+    background:#322718;
+    border-left-color:#c09135;
+}
+.rescheduled{border-left-color:#e2ad46;}
+.progress{background:#3a3021;}
+.progress-bar{
+    background:linear-gradient(90deg,#a97824,#e0b75a);
+}
+.opp-icon{
+    background:#3a2b18;
+}
+.message.ai{
+    background:#2b2216;
+    border-color:#4d3c24;
+    color:#e1d6c1;
+}
+.message.user{
+    background:#76531d;
+}
+.chat-input button{background:#a87925;}
+.conflict{
+    border-color:#67402b;
+    background:#302018;
+}
+.conflict h4{color:#e0a06b;}
+.conflict p{color:#c1a99b;}
+.warning{
+    background:#3a2b18;
+    color:#e3b85b;
+}
+.toast{
+    background:#2b2115;
+    border-color:#72572a;
+    color:#eadfca;
+}
+
+
+/* TIMETABLE UPLOAD */
+.timetable-title{
+    gap:16px;
+    flex-wrap:wrap;
+}
+.timetable-actions{
+    display:flex;
+    align-items:center;
+}
+.upload-note{
+    display:none;
+    margin:-5px 0 15px;
+    padding:10px 12px;
+    border-radius:8px;
+    background:#302617;
+    border:1px solid #5a4526;
+    color:#cdbd9e;
+    font-size:10px;
+}
+
+
+/* ATTENDANCE DETAILS */
+.attendance-detail{
+    margin-top:8px;
+    font-size:10px;
+    color:#b9ab92;
+}
+.attendance-detail strong{
+    color:#e1bd68;
+}
+
+
+/* ================= SMART TIMETABLE — VISUAL REFRESH ================= */
+/* Appears last on purpose so it wins over the earlier theme rules above. */
+
+#timetable .card{padding:22px;}
+
+.timetable-actions{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+}
+
+.link-btn{
+    background:none;
+    border:none;
+    padding:0;
+    color:#e2bf68;
+    text-decoration:underline;
+    font-size:inherit;
+    font-family:inherit;
+    cursor:pointer;
+}
+.link-btn:hover{color:#f1cd73;}
+
+.timetable-legend{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px 18px;
+    margin:16px 0 18px;
+    padding:12px 14px;
+    background:#20180f;
+    border:1px solid #493a22;
+    border-radius:10px;
+}
+.legend-item{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    font-size:10px;
+    color:#cdbd9e;
+}
+.legend-dot{
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    flex-shrink:0;
+}
+
+.week{
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:10px;
+}
+
+.day{
+    background:#1c1610;
+    border:1px solid #40331e;
+    border-radius:14px;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    transition:.2s;
+}
+.day:hover{
+    border-color:#6b5127;
+    transform:translateY(-2px);
+}
+.day.today{
+    border-color:#d6a84f;
+    box-shadow:0 0 0 1px #d6a84f;
+}
+
+.day-header{
+    text-align:center;
+    padding:12px 5px;
+    background:#2a2114;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:1px;
+    color:#cdbd9e;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+}
+.day.today .day-header{
+    background:linear-gradient(90deg,#4a3618,#352817);
+    color:#f1cd73;
+}
+.today-dot{
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:#4ade80;
+    box-shadow:0 0 6px #4ade80;
+}
+
+.class-item{
+    margin:8px;
+    padding:11px 12px;
+    border-radius:10px;
+    background:#271f13;
+    border-left:3px solid var(--accent,#c09135);
+    transition:.2s;
+}
+.class-item:hover{
+    background:#302617;
+    transform:translateX(2px);
+}
+
+.class-item h4{
+    font-size:11px;
+    color:#f3ead4;
+    display:flex;
+    align-items:center;
+    gap:6px;
+}
+.class-item h4::before{
+    content:'';
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:var(--accent,#c09135);
+    flex-shrink:0;
+}
+
+.class-item p{
+    color:#a99b82;
+    font-size:9.5px;
+    margin-top:5px;
+    line-height:1.5;
+}
+
+.rescheduled{
+    border-left-color:var(--accent,#e2ad46);
+    background:#33240f;
+}
+.rescheduled h4{color:#f1c464;}
+
+.empty-slot{
+    text-align:center;
+    color:#75694f;
+    font-size:10px;
+    padding:26px 8px;
+    background:transparent;
+    border-left:none;
+}
+
+@media (max-width:900px){
+    .week{grid-template-columns:repeat(3,1fr);}
+}
+@media (max-width:600px){
+    .week{grid-template-columns:repeat(2,1fr);}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- ================= SIDEBAR ================= -->
+
+<aside class="sidebar">
+
+    <div class="logo">
+        <h1>Campus AI</h1>
+        <p>Student Information Assistant</p>
+    </div>
+
+    <div class="nav-title">MAIN</div>
+
+    <div class="nav-item active" onclick="showPage('home',this)">
+        <span class="nav-icon">⌂</span>
+        Home
+    </div>
+
+    <div class="nav-item" onclick="showPage('dashboard',this)">
+        <span class="nav-icon">◈</span>
+        Dashboard
+    </div>
+
+    <div class="nav-item" onclick="showPage('announcements',this)">
+        <span class="nav-icon">◉</span>
+        Announcements
+    </div>
+
+    <div class="nav-item" onclick="showPage('timetable',this)">
+        <span class="nav-icon">▦</span>
+        Timetable
+    </div>
+
+    <div class="nav-item" onclick="showPage('attendance',this)">
+        <span class="nav-icon">✓</span>
+        Attendance
+    </div>
+
+    <div class="nav-title">DISCOVER</div>
+
+    <div class="nav-item" onclick="showPage('opportunities',this)">
+        <span class="nav-icon">✦</span>
+        Opportunities
+    </div>
+
+    <div class="nav-item" onclick="showPage('chat',this)">
+        <span class="nav-icon">◌</span>
+        Ask Campus AI
+    </div>
+
+</aside>
+
+
+<main class="main">
+
+<!-- ================= HOME ================= -->
+
+<section id="home" class="page active">
+
+    <div class="hero">
+
+        <span class="hero-badge">
+            ✦ AI-POWERED CAMPUS ASSISTANT
+        </span>
+
+        <h1>
+            Less scrolling.<br>
+            <span class="gradient-text">More action.</span>
+        </h1>
+
+        <p>
+            Campus AI turns scattered college announcements into
+            clear, relevant and actionable information — so students
+            know what matters, what changed and what they need to do next.
+        </p>
+
+        <button class="hero-button"
+                onclick="openDashboard()">
+            Explore Dashboard →
+        </button>
+
+        <div class="flow">
+
+            <div class="flow-card">
+                <span>📥</span>
+                <h4>Collect</h4>
+                <p>Gather announcements from different campus sources.</p>
+            </div>
+
+            <div class="flow-card">
+                <span>🧠</span>
+                <h4>Understand</h4>
+                <p>Extract deadlines, changes and important details.</p>
+            </div>
+
+            <div class="flow-card">
+                <span>🎯</span>
+                <h4>Prioritize</h4>
+                <p>Show students what needs attention first.</p>
+            </div>
+
+            <div class="flow-card">
+                <span>⚡</span>
+                <h4>Act</h4>
+                <p>Turn information into simple next steps.</p>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= DASHBOARD ================= -->
+
+<section id="dashboard" class="page">
+
+    <div class="topbar">
+
+        <div>
+            <h2>YOUR CAMPUS, SORTED</h2>
+            <p>
+                Good morning, Asmita 👋 Here's what actually matters today.
+            </p>
+        </div>
+
+        <div class="profile">
+            <div class="avatar">A</div>
+        </div>
+
+    </div>
+
+
+    <!-- CLICKABLE CAMPUS BRIEF -->
+
+    <div class="card" style="margin-bottom:16px;">
+
+        <div class="card-title">
+            <h3>Today's Campus Brief</h3>
+            <span>Updated just now</span>
+        </div>
+
+        <div class="grid grid-4">
+
+            <div class="card stat"
+                 onclick="showFilteredAnnouncements('all')">
+
+                <div class="stat-number">47</div>
+                <div class="stat-label">
+                    Announcements processed
+                </div>
+
+                <div class="stat-icon">📥</div>
+
+                <div class="stat-hint">
+                    Click to view →
+                </div>
+
+            </div>
+
+
+            <div class="card stat"
+                 onclick="showFilteredAnnouncements('duplicate')">
+
+                <div class="stat-number">12</div>
+                <div class="stat-label">
+                    Repeated messages detected
+                </div>
+
+                <div class="stat-icon">↻</div>
+
+                <div class="stat-hint">
+                    View repeated →
+                </div>
+
+            </div>
+
+
+            <div class="card stat"
+                 onclick="showFilteredAnnouncements('deadline')">
+
+                <div class="stat-number">8</div>
+                <div class="stat-label">
+                    Upcoming deadlines
+                </div>
+
+                <div class="stat-icon">⏰</div>
+
+                <div class="stat-hint">
+                    View deadlines →
+                </div>
+
+            </div>
+
+
+            <div class="card stat"
+                 onclick="showFilteredAnnouncements('schedule')">
+
+                <div class="stat-number">3</div>
+                <div class="stat-label">
+                    Schedule changes
+                </div>
+
+                <div class="stat-icon">📅</div>
+
+                <div class="stat-hint">
+                    View changes →
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="grid grid-2">
+
+        <!-- PRIORITIES -->
+
+        <div class="card">
+
+            <div class="card-title">
+                <h3>Today's Priorities</h3>
+                <span>Ranked by urgency</span>
+            </div>
+
+
+            <div class="priority">
+
+                <div class="priority-top">
+                    <h4>PS Assignment Submission</h4>
+                    <span class="tag tag-red">URGENT</span>
+                </div>
+
+                <p>
+                    Probability & Statistics assignment is due tomorrow.
+                    Submit through the assigned portal.
+                </p>
+
+            </div>
+
+
+            <div class="priority">
+
+                <div class="priority-top">
+                    <h4>CS Communication Skills Activity</h4>
+                    <span class="tag tag-yellow">TODAY</span>
+                </div>
+
+                <p>
+                    Group speaking activity scheduled during today's
+                    Communication Skills class.
+                </p>
+
+            </div>
+
+
+            <div class="priority">
+
+                <div class="priority-top">
+                    <h4>Minerva Recruitment</h4>
+                    <span class="tag tag-purple">OPPORTUNITY</span>
+                </div>
+
+                <p>
+                    Applications close tonight. Consider applying if
+                    the role matches your interests.
+                </p>
+
+            </div>
+
+
+            <div class="priority">
+
+                <div class="priority-top">
+                    <h4>BEE Practical Schedule</h4>
+                    <span class="tag tag-green">UPDATED</span>
+                </div>
+
+                <p>
+                    Practical slot has been moved to Friday.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- CONFLICT -->
+
+        <div class="card">
+
+            <div class="card-title">
+                <h3>Schedule Conflict</h3>
+                <span>Needs attention</span>
+            </div>
+
+            <div class="conflict">
+
+                <h4>⚠ Possible Clash Detected</h4>
+
+                <p>
+                    Your BEE practical and a society orientation
+                    appear to overlap on Friday afternoon.
+                </p>
+
+                <div class="warning">
+                    Information may be incomplete. Verify the original
+                    announcements before deciding what to do.
+                </div>
+
+            </div>
+
+
+            <div style="margin-top:18px;">
+
+                <div class="card-title">
+                    <h3>Next Class</h3>
+                    <span>10:00 AM</span>
+                </div>
+
+                <div class="priority">
+
+                    <div class="priority-top">
+                        <h4>Programming with Python</h4>
+                        <span class="tag tag-purple">PWP</span>
+                    </div>
+
+                    <p>
+                        Lab 2 • Academic Block
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ACTION PLAN -->
+
+    <div class="card" style="margin-top:16px;">
+
+        <div class="card-title">
+            <h3>Suggested Action Plan</h3>
+            <span>Based on today's information</span>
+        </div>
+
+        <div class="grid grid-3">
+
+            <div class="summary-box">
+
+                <h4>01 • Do first</h4>
+
+                <div class="summary-line">
+                    <strong>PS Assignment</strong>
+                </div>
+
+                <div class="summary-line">
+                    Verify requirements and submit before the deadline.
+                </div>
+
+            </div>
+
+
+            <div class="summary-box">
+
+                <h4>02 • Check</h4>
+
+                <div class="summary-line">
+                    <strong>BEE Schedule</strong>
+                </div>
+
+                <div class="summary-line">
+                    Verify the changed practical slot.
+                </div>
+
+            </div>
+
+
+            <div class="summary-box">
+
+                <h4>03 • Don't miss</h4>
+
+                <div class="summary-line">
+                    <strong>Minerva Recruitment</strong>
+                </div>
+
+                <div class="summary-line">
+                    Applications close tonight.
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= ANNOUNCEMENTS ================= -->
+
+<section id="announcements" class="page">
+
+    <div class="topbar">
+
+        <div>
+            <h2>Announcements</h2>
+            <p>
+                From campus noise to clear actions.
+            </p>
+        </div>
+
+    </div>
+
+
+    <!-- FILTER BUTTONS -->
+
+    <div class="filter-bar">
+
+        <button class="filter active"
+                onclick="filterAnnouncements('all',this)">
+            All
+        </button>
+
+        <button class="filter"
+                onclick="filterAnnouncements('deadline',this)">
+            Deadlines
+        </button>
+
+        <button class="filter"
+                onclick="filterAnnouncements('schedule',this)">
+            Schedule Changes
+        </button>
+
+        <button class="filter"
+                onclick="filterAnnouncements('duplicate',this)">
+            Repeated
+        </button>
+
+        <button class="filter"
+                onclick="filterAnnouncements('opportunity',this)">
+            Opportunities
+        </button>
+
+    </div>
+
+
+    <!-- ANALYZER -->
+
+    <div class="card" style="margin-bottom:18px;">
+
+        <div class="card-title">
+            <h3>Announcement Analyzer</h3>
+            <span>Source-aware analysis</span>
+        </div>
+
+        <textarea
+            id="announcementInput"
+            placeholder="Paste a college announcement here...">
+        </textarea>
+
+        <button class="analyze-btn"
+                onclick="analyzeAnnouncement()">
+            Analyze Announcement
+        </button>
+
+
+        <div class="analysis-result"
+             id="analysisResult">
+
+            <div class="result-row">
+                <div class="result-label">Priority</div>
+
+                <div class="result-value">
+                    <span class="tag tag-red" id="resultPriorityTag">HIGH</span>
+                </div>
+            </div>
+
+
+            <div class="result-row">
+                <div class="result-label">Category</div>
+
+                <div class="result-value" id="resultCategory">
+                    Deadline
+                </div>
+            </div>
+
+
+            <div class="result-row">
+                <div class="result-label">Deadline</div>
+
+                <div class="result-value" id="resultDeadline">
+                    Tomorrow, 11:59 PM
+                </div>
+            </div>
+
+
+            <div class="result-row">
+                <div class="result-label">Action</div>
+
+                <div class="result-value" id="resultAction">
+                    Submit the required assignment through the specified portal.
+                </div>
+            </div>
+
+
+            <div class="result-row">
+                <div class="result-label">Source</div>
+
+                <div class="result-value" id="resultSource">
+                    Department announcement
+                </div>
+            </div>
+
+
+            <div class="result-row">
+                <div class="result-label">Why it matters</div>
+
+                <div class="result-value" id="resultWhy">
+                    The deadline is approaching and submission is required.
+                </div>
+            </div>
+
+
+            <div class="result-row">
+                <div class="result-label">Trust</div>
+
+                <div class="result-value" id="resultTrust">
+                    Source identified • Verify details before acting
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- FEED -->
+
+    <div class="card">
+
+        <div class="card-title">
+            <h3 id="announcementTitle">
+                Important Announcements
+            </h3>
+
+            <span id="announcementCount">
+                6 updates
+            </span>
+        </div>
+
+
+        <div id="announcementList">
+
+
+            <!-- PS -->
+
+            <div class="announcement"
+                 data-category="deadline">
+
+                <div class="announcement-header">
+
+                    <span class="source">
+                        DEPARTMENT • PS
+                    </span>
+
+                    <span class="tag tag-red">
+                        DEADLINE
+                    </span>
+
+                </div>
+
+                <h4>
+                    Probability & Statistics Assignment
+                </h4>
+
+                <p>
+                    Assignment 2 must be submitted by tomorrow at
+                    11:59 PM. Students are advised to verify their
+                    submission before the deadline.
+                </p>
+
+                <div class="announcement-actions">
+
+                    <button class="small-btn"
+                            onclick="saveItem(this)">
+                        ☆ Save
+                    </button>
+
+                    <button class="small-btn"
+                            onclick="markDone(this)">
+                        ✓ Mark as Done
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- BEE -->
+
+            <div class="announcement"
+                 data-category="schedule">
+
+                <div class="announcement-header">
+
+                    <span class="source">
+                        DEPARTMENT • BEE
+                    </span>
+
+                    <span class="tag tag-yellow">
+                        SCHEDULE
+                    </span>
+
+                </div>
+
+                <h4>
+                    BEE Practical Schedule Updated
+                </h4>
+
+                <p>
+                    Friday's Basic Electrical Engineering practical
+                    has been shifted to a different slot. Check the
+                    department schedule before attending.
+                </p>
+
+                <div class="announcement-actions">
+
+                    <button class="small-btn"
+                            onclick="saveItem(this)">
+                        ☆ Save
+                    </button>
+
+                    <button class="small-btn"
+                            onclick="markDone(this)">
+                        ✓ Mark as Done
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- PWP -->
+
+            <div class="announcement"
+                 data-category="duplicate">
+
+                <div class="announcement-header">
+
+                    <span class="source">
+                        DEPARTMENT • PWP
+                    </span>
+
+                    <span class="tag tag-purple">
+                        REPEATED
+                    </span>
+
+                </div>
+
+                <h4>
+                    Programming with Python Lab Submission
+                </h4>
+
+                <p>
+                    This information appeared in multiple campus
+                    messages. The latest message asks students to
+                    complete the practical file before the next lab.
+                </p>
+
+                <div class="announcement-actions">
+
+                    <button class="small-btn"
+                            onclick="saveItem(this)">
+                        ☆ Save
+                    </button>
+
+                    <button class="small-btn"
+                            onclick="markDone(this)">
+                        ✓ Mark as Done
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- CS -->
+
+            <div class="announcement"
+                 data-category="deadline">
+
+                <div class="announcement-header">
+
+                    <span class="source">
+                        DEPARTMENT • CS
+                    </span>
+
+                    <span class="tag tag-yellow">
+                        TODAY
+                    </span>
+
+                </div>
+
+                <h4>
+                    Communication Skills Group Activity
+                </h4>
+
+                <p>
+                    Students will participate in a group communication
+                    activity during today's Communication Skills class.
+                </p>
+
+                <div class="announcement-actions">
+
+                    <button class="small-btn"
+                            onclick="saveItem(this)">
+                        ☆ Save
+                    </button>
+
+                    <button class="small-btn"
+                            onclick="markDone(this)">
+                        ✓ Mark as Done
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- EVS -->
+
+            <div class="announcement"
+                 data-category="duplicate">
+
+                <div class="announcement-header">
+
+                    <span class="source">
+                        COLLEGE • EVS
+                    </span>
+
+                    <span class="tag tag-green">
+                        REPEATED
+                    </span>
+
+                </div>
+
+                <h4>
+                    Environmental Studies Project Guidelines
+                </h4>
+
+                <p>
+                    Updated project guidelines have been uploaded.
+                    Similar information was also circulated earlier.
+                    Students should review the latest version.
+                </p>
+
+                <div class="announcement-actions">
+
+                    <button class="small-btn"
+                            onclick="saveItem(this)">
+                        ☆ Save
+                    </button>
+
+                    <button class="small-btn"
+                            onclick="markDone(this)">
+                        ✓ Mark as Done
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- OPPORTUNITY -->
+
+            <div class="announcement"
+                 data-category="opportunity">
+
+                <div class="announcement-header">
+
+                    <span class="source">
+                        SOCIETY • MINERVA
+                    </span>
+
+                    <span class="tag tag-purple">
+                        OPPORTUNITY
+                    </span>
+
+                </div>
+
+                <h4>
+                    Minerva Recruitment Applications
+                </h4>
+
+                <p>
+                    Recruitment applications are currently open.
+                    Interested students should check the official
+                    recruitment information before applying.
+                </p>
+
+                <div class="announcement-actions">
+
+                    <button class="small-btn"
+                            onclick="saveItem(this)">
+                        ☆ Save
+                    </button>
+
+                    <button class="small-btn"
+                            onclick="markDone(this)">
+                        ✓ Mark as Done
+                    </button>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= TIMETABLE ================= -->
+
+<section id="timetable" class="page">
+
+    <div class="topbar">
+
+        <div>
+            <h2>Smart Timetable</h2>
+            <p>
+                Your week at a glance.
+            </p>
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <div class="card-title timetable-title">
+            <div>
+                <h3>CSE-AI • Semester 1</h3>
+                <span id="timetableStatus">Sample timetable</span>
+            </div>
+
+            <div class="timetable-actions">
+                <input
+                    type="file"
+                    id="timetableFile"
+                    accept=".pdf,.png,.jpg,.jpeg,.csv,.xlsx,.xls"
+                    hidden
+                    onchange="updateTimetableFile(this)"
+                >
+                <button class="small-btn" onclick="document.getElementById('timetableFile').click()">
+                    ⬆ Upload / Update Timetable
+                </button>
+                <button class="small-btn" onclick="downloadTimetableTemplate()">
+                    ⬇ CSV Template
+                </button>
+                <button class="small-btn" onclick="resetTimetable()">
+                    ↺ Reset Sample
+                </button>
+            </div>
+        </div>
+
+        <div class="upload-note" id="timetableUploadNote">
+            Upload a <strong>CSV</strong> or <strong>Excel</strong> file with columns <em>Day, Code, Subject, Start, End</em> (use the CSV Template button for the exact format) and the grid below updates automatically. PDF/image files can be attached but can't be auto-read in this browser-only prototype.
+        </div>
+
+        <div class="timetable-legend" id="timetableLegend"></div>
+
+        <div class="week" id="timetableWeek">
+            <!-- Rendered dynamically by renderTimetable() — see script at bottom of page -->
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= ATTENDANCE ================= -->
+
+<section id="attendance" class="page">
+
+    <div class="topbar">
+        <div>
+            <h2>Attendance</h2>
+            <p>
+                Keep track of your semester attendance and how many classes you can still miss.
+            </p>
+        </div>
+    </div>
+
+    <div class="card">
+
+        <div class="card-title">
+            <h3>CSE-AI • Semester 1</h3>
+            <span>Demo data • 75% requirement</span>
+        </div>
+
+        <div class="attendance-item" data-attended="12" data-total="14">
+            <div class="attendance-top">
+                <span>Basic Electrical Engineering</span>
+                <span class="attendance-percent">86%</span>
+            </div>
+            <div class="progress">
+                <div class="progress-bar attendance-bar"></div>
+            </div>
+            <div class="attendance-detail"></div>
+        </div>
+
+        <div class="attendance-item" data-attended="10" data-total="11">
+            <div class="attendance-top">
+                <span>Probability & Statistics</span>
+                <span class="attendance-percent">91%</span>
+            </div>
+            <div class="progress">
+                <div class="progress-bar attendance-bar"></div>
+            </div>
+            <div class="attendance-detail"></div>
+        </div>
+
+        <div class="attendance-item" data-attended="14" data-total="16">
+            <div class="attendance-top">
+                <span>Environmental Studies</span>
+                <span class="attendance-percent">88%</span>
+            </div>
+            <div class="progress">
+                <div class="progress-bar attendance-bar"></div>
+            </div>
+            <div class="attendance-detail"></div>
+        </div>
+
+        <div class="attendance-item" data-attended="9" data-total="11">
+            <div class="attendance-top">
+                <span>Programming with Python</span>
+                <span class="attendance-percent">82%</span>
+            </div>
+            <div class="progress">
+                <div class="progress-bar attendance-bar"></div>
+            </div>
+            <div class="attendance-detail"></div>
+        </div>
+
+        <div class="attendance-item" data-attended="15" data-total="16">
+            <div class="attendance-top">
+                <span>IT Workshop</span>
+                <span class="attendance-percent">94%</span>
+            </div>
+            <div class="progress">
+                <div class="progress-bar attendance-bar"></div>
+            </div>
+            <div class="attendance-detail"></div>
+        </div>
+
+        <div class="attendance-item" data-attended="8" data-total="9">
+            <div class="attendance-top">
+                <span>Communication Skills</span>
+                <span class="attendance-percent">89%</span>
+            </div>
+            <div class="progress">
+                <div class="progress-bar attendance-bar"></div>
+            </div>
+            <div class="attendance-detail"></div>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= OPPORTUNITIES ================= -->
+
+<section id="opportunities" class="page">
+
+    <div class="topbar">
+
+        <div>
+            <h2>Opportunities</h2>
+            <p>
+                Discover things worth knowing about.
+            </p>
+        </div>
+
+    </div>
+
+
+    <div class="filter-bar">
+
+        <button class="filter active"
+                onclick="filterOpp('all',this)">
+            All
+        </button>
+
+        <button class="filter"
+                onclick="filterOpp('society',this)">
+            Societies
+        </button>
+
+        <button class="filter"
+                onclick="filterOpp('hackathon',this)">
+            Hackathons
+        </button>
+
+        <button class="filter"
+                onclick="filterOpp('internship',this)">
+            Internships
+        </button>
+
+        <button class="filter"
+                onclick="filterOpp('workshop',this)">
+            Workshops
+        </button>
+
+    </div>
+
+
+    <div class="grid grid-3"
+         id="opportunityGrid">
+
+
+        <div class="opportunity"
+             data-type="society">
+
+            <div class="opp-icon">
+                🌐
+            </div>
+
+            <h4>
+                Minerva Recruitment
+            </h4>
+
+            <p>
+                Technology society recruitment is currently open.
+                Research and Outreach roles available.
+            </p>
+
+            <div class="opp-meta">
+                <span>Society</span>
+                <span>Deadline: Today</span>
+            </div>
+
+            <button class="small-btn"
+                    style="margin-top:12px;"
+                    onclick="saveOpportunity(this)">
+                ☆ Save Opportunity
+            </button>
+
+        </div>
+
+
+        <div class="opportunity"
+             data-type="hackathon">
+
+            <div class="opp-icon">
+                ⚡
+            </div>
+
+            <h4>
+                Campus Hackathon
+            </h4>
+
+            <p>
+                Student teams can build solutions around campus
+                problems and present their prototypes.
+            </p>
+
+            <div class="opp-meta">
+                <span>Hackathon</span>
+                <span>2 weeks left</span>
+            </div>
+
+            <button class="small-btn"
+                    style="margin-top:12px;"
+                    onclick="saveOpportunity(this)">
+                ☆ Save Opportunity
+            </button>
+
+        </div>
+
+
+        <div class="opportunity"
+             data-type="workshop">
+
+            <div class="opp-icon">
+                💻
+            </div>
+
+            <h4>
+                Python Beginner Workshop
+            </h4>
+
+            <p>
+                Introductory programming workshop designed for
+                first-year students.
+            </p>
+
+            <div class="opp-meta">
+                <span>Workshop</span>
+                <span>Saturday</span>
+            </div>
+
+            <button class="small-btn"
+                    style="margin-top:12px;"
+                    onclick="saveOpportunity(this)">
+                ☆ Save Opportunity
+            </button>
+
+        </div>
+
+
+        <div class="opportunity"
+             data-type="internship">
+
+            <div class="opp-icon">
+                🚀
+            </div>
+
+            <h4>
+                Student Research Internship
+            </h4>
+
+            <p>
+                Undergraduate students can apply for a short-term
+                research opportunity.
+            </p>
+
+            <div class="opp-meta">
+                <span>Internship</span>
+                <span>Deadline: 5 days</span>
+            </div>
+
+            <button class="small-btn"
+                    style="margin-top:12px;"
+                    onclick="saveOpportunity(this)">
+                ☆ Save Opportunity
+            </button>
+
+        </div>
+
+
+        <div class="opportunity"
+             data-type="society">
+
+            <div class="opp-icon">
+                🎨
+            </div>
+
+            <h4>
+                Creative Society Orientation
+            </h4>
+
+            <p>
+                Freshers interested in design, media and creative
+                work can attend the orientation.
+            </p>
+
+            <div class="opp-meta">
+                <span>Society</span>
+                <span>Friday</span>
+            </div>
+
+            <button class="small-btn"
+                    style="margin-top:12px;"
+                    onclick="saveOpportunity(this)">
+                ☆ Save Opportunity
+            </button>
+
+        </div>
+
+
+        <div class="opportunity"
+             data-type="hackathon">
+
+            <div class="opp-icon">
+                🧠
+            </div>
+
+            <h4>
+                AI Innovation Challenge
+            </h4>
+
+            <p>
+                Teams are invited to develop innovative applications
+                using AI and emerging technologies.
+            </p>
+
+            <div class="opp-meta">
+                <span>Hackathon</span>
+                <span>10 days left</span>
+            </div>
+
+            <button class="small-btn"
+                    style="margin-top:12px;"
+                    onclick="saveOpportunity(this)">
+                ☆ Save Opportunity
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= CHAT ================= -->
+
+<section id="chat" class="page">
+
+    <div class="topbar">
+
+        <div>
+            <h2>Ask Campus AI</h2>
+            <p>
+                Ask questions about your campus information.
+            </p>
+        </div>
+
+    </div>
+
+
+    <div class="chat-box">
+
+        <div class="chat-messages"
+             id="chatMessages">
+
+            <div class="message ai">
+
+                Hi Asmita 👋 I'm your Campus AI assistant.
+
+                <br><br>
+
+                Try asking:
+
+                <br><br>
+
+                • What do I have tomorrow?<br>
+                • What deadlines are coming up?<br>
+                • Do I have any schedule conflicts?<br>
+                • What opportunities are available?<br>
+                • What does CS mean?
+
+            </div>
+
+        </div>
+
+
+        <div class="chat-input">
+
+            <input
+                id="chatInput"
+                placeholder="Ask something about your campus..."
+                onkeydown="if(event.key==='Enter') sendMessage()"
+            >
+
+            <button onclick="sendMessage()">
+                Send
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+</main>
+</div>
+
+
+<!-- TOAST -->
+
+<div class="toast" id="toast">
+    Saved successfully
+</div>
+
+
+<script>
+
+/* ================= NAVIGATION ================= */
+
+function showPage(pageId, element){
+
+    document.querySelectorAll('.page').forEach(page=>{
+        page.classList.remove('active');
+    });
+
+    document.getElementById(pageId).classList.add('active');
+
+    document.querySelectorAll('.nav-item').forEach(item=>{
+        item.classList.remove('active');
+    });
+
+    if(element){
+        element.classList.add('active');
+    }
+
+    window.scrollTo({
+        top:0,
+        behavior:'smooth'
+    });
+}
+
+
+function openDashboard(){
+
+    const dashboardNav =
+        document.querySelectorAll('.nav-item')[1];
+
+    showPage('dashboard',dashboardNav);
+}
+
+
+/* ================= DASHBOARD STATISTICS ================= */
+
+function showFilteredAnnouncements(category){
+
+    const navItems =
+        document.querySelectorAll('.nav-item');
+
+    showPage('announcements',navItems[2]);
+
+    setTimeout(()=>{
+
+        if(category === 'all'){
+            filterAnnouncements('all',null);
+        }
+        else{
+            filterAnnouncements(category,null);
+        }
+
+    },100);
+}
+
+
+/* ================= ANNOUNCEMENT FILTER ================= */
+
+function filterAnnouncements(category,button){
+
+    const cards =
+        document.querySelectorAll('#announcementList .announcement');
+
+    document.querySelectorAll('.filter').forEach(btn=>{
+        btn.classList.remove('active');
+    });
+
+    if(button){
+        button.classList.add('active');
+    }
+    else{
+
+        document.querySelectorAll('.filter').forEach(btn=>{
+
+            const text =
+                btn.innerText.toLowerCase();
+
+            if(
+                (category === 'all' && text === 'all') ||
+                (category === 'deadline' && text.includes('deadline')) ||
+                (category === 'schedule' && text.includes('schedule')) ||
+                (category === 'duplicate' && text.includes('repeated')) ||
+                (category === 'opportunity' && text.includes('opportunit'))
+            ){
+                btn.classList.add('active');
+            }
+
+        });
+
+    }
+
+    let count = 0;
+
+    cards.forEach(card=>{
+
+        if(
+            category === 'all' ||
+            card.dataset.category === category
+        ){
+
+            card.style.display='block';
+            count++;
+
+        }
+        else{
+
+            card.style.display='none';
+
+        }
+
+    });
+
+    const title =
+        document.getElementById('announcementTitle');
+
+    const counter =
+        document.getElementById('announcementCount');
+
+    if(category === 'all'){
+        title.innerText='Important Announcements';
+    }
+    else if(category === 'deadline'){
+        title.innerText='Upcoming Deadlines';
+    }
+    else if(category === 'schedule'){
+        title.innerText='Schedule Changes';
+    }
+    else if(category === 'duplicate'){
+        title.innerText='Repeated Messages';
+    }
+    else if(category === 'opportunity'){
+        title.innerText='Campus Opportunities';
+    }
+
+    counter.innerText =
+        count + (count === 1 ? ' update' : ' updates');
+
+    window.scrollTo({
+        top:0,
+        behavior:'smooth'
+    });
+}
+
+
+/* ================= ANALYZER ================= */
+/* Lightweight, fully client-side heuristic "AI" analysis of the pasted
+   text — no server/API involved. It reads the announcement and scores
+   keywords/patterns for category, priority, deadline, action, source
+   and trust, so the result actually reacts to what was pasted. */
+
+const ANALYZER_SOURCES = [
+    { keys:['exam cell','examination cell','exam section','controller of examinations'], label:'Examination Cell' },
+    { keys:['tpo','placement cell','placement office','career cell','training and placement'], label:'Training & Placement Office' },
+    { keys:['hod','head of department','department of','dept.'], label:'Department Office' },
+    { keys:['faculty','professor','dr.','prof.'], label:'Faculty' },
+    { keys:['student council','student body','student union'], label:'Student Council' },
+    { keys:['hostel','warden'], label:'Hostel Office' },
+    { keys:['library'], label:'Library' },
+    { keys:['sports','ncc','nss'], label:'Sports / NCC / NSS Cell' },
+    { keys:['admin','administration','registrar'], label:'Administration' }
+];
+
+const ANALYZER_ACTION_VERBS = [
+    'submit','register','pay','attend','bring','complete','fill','upload',
+    'report','join','collect','confirm','apply','download','carry','contact'
+];
+
+function detectCategory(text){
+    const low = text.toLowerCase();
+
+    if(/reschedul|postpon|venue chang|shift(ed)? to|new (timing|time|slot|venue)|cancel(led)?|moved to/.test(low)) return 'schedule';
+    if(/hackathon|internship|workshop|recruit|placement drive|fest|competition|scholarship|volunteer|opportunit/.test(low)) return 'opportunity';
+    if(/again|repeat|already (shared|sent|announced)|duplicate|reminder of (the )?(earlier|previous)/.test(low)) return 'duplicate';
+    if(/deadline|due|last date|submit.*by|pay.*by|before \d/.test(low)) return 'deadline';
+
+    return 'deadline';
+}
+
+function detectPriority(category, text, deadlineIsSoon){
+    const low = text.toLowerCase();
+
+    if(deadlineIsSoon || /urgent|immediately|mandatory|compulsory|failure to|strict(ly)?|last date|final (call|notice)/.test(low)){
+        return 'HIGH';
+    }
+
+    if(/optional|fyi|for your information|no action|informational/.test(low)){
+        return 'LOW';
+    }
+
+    return 'MEDIUM';
+}
+
+function extractDeadline(text){
+    const dayWords = ['today','tomorrow','monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
+    const low = text.toLowerCase();
+    const dayMatch = dayWords.find(d => low.includes(d));
+
+    const timeMatch = text.match(/\b(\d{1,2})(:\d{2})?\s?(am|pm|AM|PM)\b/);
+    const dateMatch =
+        text.match(/\b(\d{1,2})(st|nd|rd|th)?[\s-](jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\b/i) ||
+        text.match(/\b(\d{1,2})[\/-](\d{1,2})[\/-]?(\d{2,4})?\b/);
+
+    const parts = [];
+
+    if(dateMatch){
+        parts.push(dateMatch[0]);
+    }else if(dayMatch){
+        parts.push(dayMatch.charAt(0).toUpperCase() + dayMatch.slice(1));
+    }
+
+    if(timeMatch){
+        parts.push(timeMatch[0].toUpperCase());
+    }
+
+    if(parts.length === 0) return null;
+
+    return { text: parts.join(', '), isSoon: /today|tomorrow/.test(low) };
+}
+
+function extractAction(text){
+    const sentences = text.split(/(?<=[.!?])\s+/).filter(s => s.trim() !== '');
+
+    for(const s of sentences){
+        const low = s.toLowerCase();
+
+        if(ANALYZER_ACTION_VERBS.some(v => low.includes(v))){
+            return s.trim();
+        }
+    }
+
+    return sentences[0] ? sentences[0].trim() : 'No specific action detected — read the full announcement for details.';
+}
+
+function extractSource(text){
+    const low = text.toLowerCase();
+
+    for(const src of ANALYZER_SOURCES){
+        if(src.keys.some(k => low.includes(k))){
+            return { label: src.label, confident: true };
+        }
+    }
+
+    return { label: 'Campus Announcement', confident: false };
+}
+
+function categoryLabel(cat){
+    switch(cat){
+        case 'schedule': return 'Schedule Change';
+        case 'opportunity': return 'Opportunity';
+        case 'duplicate': return 'Repeated Message';
+        default: return 'Deadline';
+    }
+}
+
+function whyItMatters(cat, priority, deadline){
+    if(cat === 'schedule'){
+        return 'A timing or venue change was mentioned — check it against your timetable to avoid a clash.';
+    }
+
+    if(cat === 'opportunity'){
+        return 'This looks like an opportunity (event, internship or recruitment) that may need early action to register or apply.';
+    }
+
+    if(cat === 'duplicate'){
+        return 'This message looks similar to something already announced — likely a reminder rather than new information.';
+    }
+
+    if(deadline){
+        return 'A deadline was detected (' + deadline.text + '). ' +
+            (deadline.isSoon ? 'It is coming up soon, so act quickly.' : 'Plan ahead so you do not miss it.');
+    }
+
+    return 'No clear deadline was detected, but the announcement may still need a response — review it fully.';
+}
+
+function analyzeAnnouncement(){
+
+    const input =
+        document.getElementById('announcementInput');
+
+    const result =
+        document.getElementById('analysisResult');
+
+    const text = input.value.trim();
+
+    if(text===''){
+
+        showToast('Paste an announcement first.');
+
+        input.focus();
+
+        return;
+    }
+
+    const category = detectCategory(text);
+    const deadline = extractDeadline(text);
+    const priority = detectPriority(category, text, !!(deadline && deadline.isSoon));
+    const action = extractAction(text);
+    const source = extractSource(text);
+
+    document.getElementById('resultCategory').innerText = categoryLabel(category);
+
+    const priorityTag = document.getElementById('resultPriorityTag');
+    priorityTag.innerText = priority;
+    priorityTag.className = 'tag ' + (priority === 'HIGH' ? 'tag-red' : priority === 'MEDIUM' ? 'tag-yellow' : 'tag-green');
+
+    document.getElementById('resultDeadline').innerText = deadline ? deadline.text : 'No specific deadline mentioned';
+    document.getElementById('resultAction').innerText = action;
+    document.getElementById('resultSource').innerText = source.label;
+    document.getElementById('resultWhy').innerText = whyItMatters(category, priority, deadline);
+    document.getElementById('resultTrust').innerText = source.confident
+        ? 'Source identified • Verify details before acting'
+        : 'Source unclear • Cross-check before acting';
+
+    result.style.display='block';
+
+    showToast('Announcement analyzed.');
+
+    result.scrollIntoView({behavior:'smooth', block:'nearest'});
+
+}
+
+
+/* ================= SAVE ================= */
+
+function saveItem(button){
+
+    if(button.innerText.includes('Saved')){
+
+        button.innerText='☆ Save';
+        button.classList.remove('done');
+
+        showToast('Removed from saved items.');
+
+    }
+    else{
+
+        button.innerText='★ Saved';
+        button.classList.add('done');
+
+        showToast('Announcement saved.');
+
+    }
+
+}
+
+
+/* ================= MARK DONE ================= */
+
+function markDone(button){
+
+    button.innerText='✓ Completed';
+    button.classList.add('done');
+
+    showToast('Marked as completed.');
+
+}
+
+
+/* ================= OPPORTUNITIES ================= */
+
+function filterOpp(type,button){
+
+    document.querySelectorAll('.filter').forEach(btn=>{
+        btn.classList.remove('active');
+    });
+
+    button.classList.add('active');
+
+    document.querySelectorAll('.opportunity').forEach(card=>{
+
+        if(type==='all'){
+
+            card.style.display='block';
+
+        }
+        else{
+
+            if(card.dataset.type===type){
+                card.style.display='block';
+            }
+            else{
+                card.style.display='none';
+            }
+
+        }
+
+    });
+
+}
+
+
+/* ================= SAVE OPPORTUNITY ================= */
+
+function saveOpportunity(button){
+
+    if(button.innerText.includes('Saved')){
+
+        button.innerText='☆ Save Opportunity';
+        button.classList.remove('done');
+
+        showToast('Opportunity removed.');
+
+    }
+    else{
+
+        button.innerText='★ Saved';
+        button.classList.add('done');
+
+        showToast('Opportunity saved.');
+
+    }
+
+}
+
+
+/* ================= CHAT ================= */
+
+function sendMessage(){
+
+    const input =
+        document.getElementById('chatInput');
+
+    const messages =
+        document.getElementById('chatMessages');
+
+    const text =
+        input.value.trim();
+
+    if(text==='') return;
+
+
+    const userMessage =
+        document.createElement('div');
+
+    userMessage.className='message user';
+
+    userMessage.innerText=text;
+
+    messages.appendChild(userMessage);
+
+    input.value='';
+
+
+    setTimeout(()=>{
+
+        const aiMessage =
+            document.createElement('div');
+
+        aiMessage.className='message ai';
+
+        const lower =
+            text.toLowerCase();
+
+
+        if(
+            lower.includes('tomorrow') ||
+            lower.includes('schedule')
+        ){
+
+            aiMessage.innerText =
+            'Based on the sample timetable, tomorrow includes BEE, EVS and IT Workshop. Check the Smart Timetable for the complete schedule.';
+
+        }
+
+        else if(
+            lower.includes('deadline') ||
+            lower.includes('due')
+        ){
+
+            aiMessage.innerText =
+            'The most urgent sample deadline is the Probability & Statistics assignment, shown as due tomorrow at 11:59 PM.';
+
+        }
+
+        else if(
+            lower.includes('conflict') ||
+            lower.includes('clash')
+        ){
+
+            aiMessage.innerText =
+            'A possible conflict was detected between the BEE practical and a society orientation. The system flags the conflict but does not decide which commitment you should choose.';
+
+        }
+
+        else if(
+            lower.includes('opportun')
+        ){
+
+            aiMessage.innerText =
+            'Current opportunities include Minerva recruitment, a campus hackathon, a Python workshop, a research internship and society orientations.';
+
+        }
+
+        else if(
+            lower.includes('cs') ||
+            lower.includes('communication')
+        ){
+
+            aiMessage.innerText =
+            'CS stands for Communication Skills in this CSE-AI Semester 1 prototype.';
+
+        }
+
+        else if(
+            lower.includes('pwp')
+        ){
+
+            aiMessage.innerText =
+            'PWP stands for Programming with Python.';
+
+        }
+
+        else if(
+            lower.includes('bee')
+        ){
+
+            aiMessage.innerText =
+            'BEE stands for Basic Electrical Engineering. A sample schedule change is currently shown for the BEE practical.';
+
+        }
+
+        else{
+
+            aiMessage.innerText =
+            'I can help you understand announcements, deadlines, timetable changes, conflicts, attendance and campus opportunities.';
+
+        }
+
+
+        messages.appendChild(aiMessage);
+
+        messages.scrollTop =
+            messages.scrollHeight;
+
+    },450);
+
+}
+
+
+
+/* ================= SMART TIMETABLE — DATA + RENDERING ================= */
+
+const SUBJECT_NAMES = {
+    PS: 'Probability & Statistics',
+    PWP: 'Programming with Python',
+    CS: 'Communication Skills',
+    BEE: 'Basic Electrical Engineering',
+    EVS: 'Environmental Studies',
+    ITW: 'IT Workshop'
+};
+
+const SUBJECT_COLORS = {
+    PS: '#c09135',
+    PWP: '#4fb8c4',
+    CS: '#e07bb0',
+    BEE: '#e2ad46',
+    EVS: '#7ec97a',
+    ITW: '#e88a4e'
+};
+
+const DAY_LABELS = ['MON','TUE','WED','THU','FRI','SAT'];
+
+let timetableData = [
+    { day:'MON', classes:[
+        {code:'PS', start:'9:00', end:'10:00'},
+        {code:'PWP', start:'10:00', end:'11:00'},
+        {code:'CS', start:'2:00', end:'3:00'}
+    ]},
+    { day:'TUE', classes:[
+        {code:'BEE', start:'9:00', end:'10:00'},
+        {code:'EVS', start:'11:00', end:'12:00'},
+        {code:'ITW', start:'2:00', end:'4:00'}
+    ]},
+    { day:'WED', classes:[
+        {code:'CS', start:'9:00', end:'10:00'},
+        {code:'PWP', start:'12:00', end:'1:00', rescheduled:true},
+        {code:'PS', start:'2:00', end:'3:00'}
+    ]},
+    { day:'THU', classes:[
+        {code:'EVS', start:'9:00', end:'10:00'},
+        {code:'BEE', start:'11:00', end:'12:00'},
+        {code:'PWP', start:'2:00', end:'3:00'}
+    ]},
+    { day:'FRI', classes:[
+        {code:'ITW', start:'9:00', end:'11:00'},
+        {code:'BEE', start:'1:00', end:'3:00', rescheduled:true, label:'Practical'},
+        {code:'PS', start:'3:00', end:'4:00'}
+    ]},
+    { day:'SAT', classes:[
+        {code:'PWP', start:'9:00', end:'10:00'},
+        {code:'CS', start:'11:00', end:'12:00'}
+    ]}
+];
+
+const DEFAULT_TIMETABLE = JSON.parse(JSON.stringify(timetableData));
+
+function colorForCode(code){
+    if(SUBJECT_COLORS[code]) return SUBJECT_COLORS[code];
+
+    let hash = 0;
+    for(let i=0;i<code.length;i++){
+        hash = code.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const hue = Math.abs(hash) % 360;
+    return 'hsl(' + hue + ', 55%, 58%)';
+}
+
+function nameForCode(code){
+    return SUBJECT_NAMES[code] || code;
+}
+
+function renderTimetableLegend(data){
+    const legend = document.getElementById('timetableLegend');
+    if(!legend) return;
+
+    const seen = {};
+    let html = '';
+
+    data.forEach(day => {
+        day.classes.forEach(cls => {
+            if(seen[cls.code]) return;
+            seen[cls.code] = true;
+
+            html +=
+                '<div class="legend-item">' +
+                    '<span class="legend-dot" style="background:' + colorForCode(cls.code) + ';"></span>' +
+                    cls.code + ' — ' + nameForCode(cls.code) +
+                '</div>';
+        });
+    });
+
+    legend.innerHTML = html;
+}
+
+function renderTimetable(data){
+    const week = document.getElementById('timetableWeek');
+    if(!week) return;
+
+    week.innerHTML = '';
+
+    const jsDay = new Date().getDay(); // 0 = Sun ... 6 = Sat
+    const todayIndex = jsDay === 0 ? -1 : jsDay - 1; // MON=0 ... SAT=5
+
+    data.forEach((day, idx) => {
+        const dayEl = document.createElement('div');
+        dayEl.className = 'day' + (idx === todayIndex ? ' today' : '');
+
+        const header = document.createElement('div');
+        header.className = 'day-header';
+        header.innerHTML = day.day + (idx === todayIndex ? '<span class="today-dot"></span>' : '');
+        dayEl.appendChild(header);
+
+        if(day.classes.length === 0){
+            const empty = document.createElement('div');
+            empty.className = 'class-item empty-slot';
+            empty.innerHTML = '<p>No classes</p>';
+            dayEl.appendChild(empty);
+        }
+
+        day.classes.forEach(cls => {
+            const item = document.createElement('div');
+            item.className = 'class-item' + (cls.rescheduled ? ' rescheduled' : '');
+            item.style.setProperty('--accent', colorForCode(cls.code));
+
+            const title = cls.code + (cls.rescheduled ? ' ⚠' : '');
+            const subLabel = cls.label ? cls.label : nameForCode(cls.code);
+
+            item.innerHTML =
+                '<h4>' + title + '</h4>' +
+                '<p>' + subLabel + '<br>' + cls.start + ' – ' + cls.end + '</p>';
+
+            dayEl.appendChild(item);
+        });
+
+        week.appendChild(dayEl);
+    });
+
+    renderTimetableLegend(data);
+}
+
+function parseCSV(text){
+    const lines = text.split(/\r?\n/).filter(l => l.trim() !== '');
+    if(lines.length < 2) return null;
+
+    const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+
+    const rows = lines.slice(1).map(line => {
+        const cells = line.split(',').map(c => c.trim());
+        const obj = {};
+        headers.forEach((h, i) => obj[h] = cells[i] || '');
+        return obj;
+    });
+
+    return rowsToTimetable(rows);
+}
+
+function rowsToTimetable(rows){
+    const byDay = {};
+    DAY_LABELS.forEach(d => byDay[d] = []);
+
+    let matched = 0;
+
+    rows.forEach(row => {
+        const dayRaw = String(row.day || '').toUpperCase().slice(0,3);
+        const day = DAY_LABELS.find(d => d === dayRaw);
+        if(!day) return;
+
+        const code = String(row.code || row.subject || '').toUpperCase().trim();
+        if(!code) return;
+
+        const subject = row.subject ? String(row.subject).trim() : '';
+
+        byDay[day].push({
+            code: code,
+            label: (subject && subject.toUpperCase() !== code) ? subject : undefined,
+            start: row.start || '',
+            end: row.end || '',
+            rescheduled: /^y|true/i.test(String(row.rescheduled || ''))
+        });
+
+        matched++;
+    });
+
+    if(matched === 0) return null;
+
+    return DAY_LABELS.map(d => ({ day:d, classes: byDay[d] }));
+}
+
+function downloadTimetableTemplate(){
+    let csv = 'Day,Code,Subject,Start,End,Rescheduled\n';
+
+    timetableData.forEach(day => {
+        day.classes.forEach(c => {
+            csv += [day.day, c.code, c.label || nameForCode(c.code), c.start, c.end, c.rescheduled ? 'yes' : 'no'].join(',') + '\n';
+        });
+    });
+
+    const blob = new Blob([csv], {type:'text/csv'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'timetable_template.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    showToast('CSV template downloaded.');
+}
+
+function resetTimetable(){
+    timetableData = JSON.parse(JSON.stringify(DEFAULT_TIMETABLE));
+    renderTimetable(timetableData);
+
+    document.getElementById('timetableStatus').innerText = 'Sample timetable';
+
+    const note = document.getElementById('timetableUploadNote');
+    note.style.display = 'none';
+
+    showToast('Timetable reset to sample.');
+}
+
+function updateTimetableFile(input){
+    const note = document.getElementById('timetableUploadNote');
+    const status = document.getElementById('timetableStatus');
+
+    if(!input.files || !input.files[0]) return;
+
+    const file = input.files[0];
+    const fileName = file.name;
+    const ext = fileName.split('.').pop().toLowerCase();
+
+    note.style.display = 'block';
+
+    if(ext === 'csv'){
+
+        const reader = new FileReader();
+
+        reader.onload = function(e){
+            const parsed = parseCSV(e.target.result);
+
+            if(parsed){
+                timetableData = parsed;
+                renderTimetable(timetableData);
+                status.innerText = 'Updated from ' + fileName;
+                note.innerHTML = '✓ Timetable updated from <strong>' + fileName + '</strong>.';
+                showToast('Timetable updated successfully.');
+            }else{
+                note.innerHTML = '⚠ Could not find valid rows in <strong>' + fileName + '</strong>. Expected columns: Day, Code, Subject, Start, End.';
+                showToast('Could not parse that file.');
+            }
+        };
+
+        reader.onerror = function(){
+            note.innerHTML = '⚠ Could not read ' + fileName + '.';
+        };
+
+        reader.readAsText(file);
+
+    }
+    else if(ext === 'xlsx' || ext === 'xls'){
+
+        if(typeof XLSX === 'undefined'){
+            note.innerHTML = '⚠ Excel support failed to load (no internet access?). Try a CSV file instead.';
+            showToast('Could not load Excel support.');
+            return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = function(e){
+            try{
+                const wb = XLSX.read(new Uint8Array(e.target.result), {type:'array'});
+                const sheet = wb.Sheets[wb.SheetNames[0]];
+                const rawRows = XLSX.utils.sheet_to_json(sheet, {defval:''});
+
+                const rows = rawRows.map(r => {
+                    const obj = {};
+                    Object.keys(r).forEach(k => obj[k.toLowerCase().trim()] = String(r[k]).trim());
+                    return obj;
+                });
+
+                const parsed = rowsToTimetable(rows);
+
+                if(parsed){
+                    timetableData = parsed;
+                    renderTimetable(timetableData);
+                    status.innerText = 'Updated from ' + fileName;
+                    note.innerHTML = '✓ Timetable updated from <strong>' + fileName + '</strong>.';
+                    showToast('Timetable updated successfully.');
+                }else{
+                    note.innerHTML = '⚠ Could not find valid rows in <strong>' + fileName + '</strong>. Expected columns: Day, Code, Subject, Start, End.';
+                    showToast('Could not parse that file.');
+                }
+            }catch(err){
+                note.innerHTML = '⚠ Could not read ' + fileName + '. Make sure it is a valid Excel file.';
+                showToast('Could not parse that file.');
+            }
+        };
+
+        reader.readAsArrayBuffer(file);
+
+    }
+    else{
+
+        status.innerText = 'File attached (manual review needed)';
+        note.innerHTML =
+            '📎 <strong>' + fileName + '</strong> was attached, but this prototype can\'t automatically read timetable data out of a ' +
+            ext.toUpperCase() + ' file. Upload a <strong>CSV</strong> or <strong>Excel</strong> file with columns ' +
+            '<em>Day, Code, Subject, Start, End</em> to update the grid automatically — or ' +
+            '<button class="link-btn" onclick="downloadTimetableTemplate()">download a template</button>.';
+
+        showToast(ext.toUpperCase() + ' attached — use CSV/Excel for auto-update.');
+    }
+}
+
+renderTimetable(timetableData);
+
+
+/* ================= ATTENDANCE CALCULATOR ================= */
+
+function calculateAttendance(){
+    document.querySelectorAll('.attendance-item').forEach(item => {
+        const attended = Number(item.dataset.attended);
+        const total = Number(item.dataset.total);
+        const percent = total > 0 ? (attended / total) * 100 : 0;
+
+        const percentElement = item.querySelector('.attendance-percent');
+        const bar = item.querySelector('.attendance-bar');
+        const detail = item.querySelector('.attendance-detail');
+
+        percentElement.innerText = Math.round(percent) + '%';
+        bar.style.width = Math.min(percent,100) + '%';
+
+        if(percent >= 75){
+            const maxMisses = Math.floor((attended / 0.75) - total + 1e-9);
+
+            if(maxMisses > 0){
+                detail.innerHTML =
+                    '<strong>Can miss ' + maxMisses +
+                    ' more ' + (maxMisses === 1 ? 'class' : 'classes') +
+                    '</strong> and still stay at or above 75%.';
+            }else{
+                detail.innerHTML =
+                    '<strong>0 classes can be missed</strong> without going below 75%.';
+            }
+        }else{
+            const needed = Math.ceil((0.75 * total - attended) / 0.25);
+            detail.innerHTML =
+                '<strong>Attend the next ' + needed +
+                ' ' + (needed === 1 ? 'class' : 'classes') +
+                '</strong> to reach 75%.';
+        }
+    });
+}
+
+calculateAttendance();
+
+
+/* ================= TOAST ================= */
+
+function showToast(message){
+
+    const toast =
+        document.getElementById('toast');
+
+    toast.innerText=message;
+
+    toast.classList.add('show');
+
+    setTimeout(()=>{
+        toast.classList.remove('show');
+    },2200);
+
+}
+
+</script>
+
+</body>
+</html>
